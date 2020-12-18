@@ -6,20 +6,20 @@
 # (see LICENSE.txt for details)
 # -----------------------------------------------------------------------------
 # Email: myhackband@yandex.ru
-# Github: https://github.com/mysmarthub/komandoro/
-# PyPi: https://pypi.org/project/komandoro/
+# Github: https://github.com/mysmarthub/commandoro/
+# PyPi: https://pypi.org/project/commandoro/
 # -----------------------------------------------------------------------------
 from setuptools import setup, find_packages
 from os.path import join, dirname
 
-PACKAGE = "komandoro"
+PACKAGE = "commandoro"
 VERSION = __import__(PACKAGE).__version__
 AUTHOR = __import__(PACKAGE).__author__
 AUTHOR_EMAIL = "myhackband@yandex.ru"
-DESCRIPTION = "Utility for automatic command execution." \
+DESCRIPTION = "Commandoro - utility for automatic command execution." \
               " Aleksandr Suvorov | https://github.com/mysmarthub/ | Donate: 4276 4417 5763 7686"
-NAME = "komandoro"
-URL = "https://github.com/mysmarthub/komandoro"
+NAME = "commandoro"
+URL = "https://github.com/mysmarthub/commandoro"
 LICENSE = 'MIT'
 LONG_DESCRIPTION = open(join(dirname(__file__), 'README.md')).read()
 INSTALL_REQUIRES = []
@@ -40,7 +40,7 @@ CLASSIFIERS = [
     "Topic :: Utilities"
 ]
 KEYWORDS = [
-    'komandoro',
+    'commandoro',
     'automatic command execution',
 ]
 setup(
@@ -61,6 +61,6 @@ setup(
     keywords=KEYWORDS,
     entry_points={
         'console_scripts':
-            ['komandoro = komandoro.start:main']
+            ['commandoro = commandoro.start:main']
         }
 )

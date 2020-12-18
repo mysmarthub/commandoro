@@ -101,7 +101,7 @@ def start(conf_dict):
 def createParser():
     parser = argparse.ArgumentParser(
         description='Utility for automatic command execution',
-        prog=f'Komandoro',
+        prog=f'Commandoro',
         epilog="""The configuration file must be a file in the format 
         .json and have the correct settings""",
     )
@@ -126,7 +126,7 @@ def logo(func):
 
     def deco():
         print(''.center(COLUMNS, '*'))
-        print('Comandoro'.center(COLUMNS, '='))
+        print('Commandoro'.center(COLUMNS, '='))
         print('Aleksandr Suvorov | myhackband@ya.ru'.center(COLUMNS, '-'))
         print(f'Utility for automatic command execution'.center(COLUMNS, '='))
         if path:

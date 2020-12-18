@@ -1,4 +1,4 @@
-Komandoro
+Commandoro
 ===
 ---
     Created: Aleksandr Suvorov
@@ -39,7 +39,7 @@ Help:
 ----
 
 ```
-usage: Komandoro [-h] [--v] [path]
+usage: Commandoro [-h] [--v] [path]
 
 Utility for automatic command execution
 
@@ -59,40 +59,40 @@ Installation and launch:
 ---
     You can install the utility using pip, pipenv:
 
-`pip install komandoro`
+`pip install commandoro`
 
-`pipenv install komandoro`
+`pipenv install commandoro`
 
-`sudo pip install komandoro`
+`sudo pip install commandoro`
 
-`sudo pipenv install komandoro`
+`sudo pipenv install commandoro`
 
     And then run it like this:
 
-`komandoro`
+`commandoro`
 
-`komandoro /path to the settings file/config.json`
+`commandoro /path to the settings file/config.json`
 
 >On some systems, some commands require administrator rights, 
 > so you can install the utility and run it further using:
 
-`sudo pip install komandoro`
+`sudo pip install commandoro`
 
-`sudo pipenv install komandoro`
+`sudo pipenv install commandoro`
 
-`sudo komandoro`
+`sudo commandoro`
 
-`sudo komandoro /path to the settings file/config.json`
+`sudo commandoro /path to the settings file/config.json`
 
 >You can download the source files and run using Python:
 
 ```
-git clone https://github.com/mysmarthub/komandoro.git
-python komandoro/komandoro/start.py
+git clone https://github.com/mysmarthub/commandoro.git
+python commandoro/commandoro/start.py
  
  or
 
-sudo python komandoro/komandoro/start.py
+sudo python commandoro/commandoro/start.py
 ```
 ---
 
@@ -105,7 +105,7 @@ Disclaimer
 > provides only an automated shell for executing commands on your system.
 
 ---
-[GitHub](https://github.com/mysmarthub/komandoro) / [PyPi](https://pypi.org/project/komandoro/)
+[GitHub](https://github.com/mysmarthub/commandoro) / [PyPi](https://pypi.org/project/commandoro/)
 ---
 
 

@@ -3,7 +3,17 @@ Commandoro
 ---
     Created: Aleksandr Suvorov
 ---
-
+![PyPI](https://img.shields.io/pypi/v/commandoro)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/commandoro)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mysmarthub/commandoro)
+![GitHub all releases](https://img.shields.io/github/downloads/mysmarthub/commandoro/total)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/commandoro)
+![GitHub](https://img.shields.io/github/license/mysmarthub/commandoro)
+![GitHub User's stars](https://img.shields.io/github/stars/mysmarthub?style=social)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysmarthub/commandoro)
+![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/mysmarthub/commandoro)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mysmarthub/commandoro)
 >Utility for automatic command execution
 ---
 

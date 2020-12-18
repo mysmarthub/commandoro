@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 COLUMNS, _ = shutil.get_terminal_size()
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 
 def check_path(path):

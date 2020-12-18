@@ -3,7 +3,7 @@ Commandoro
 ---
     Created: Aleksandr Suvorov
 ---
-![PyPI](https://img.shields.io/pypi/v/commandoro)
+[![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/commandoro)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mysmarthub/commandoro)

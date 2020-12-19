@@ -153,4 +153,9 @@ https://money.yandex.ru/to/4100110928527458
 
 >Sberbank Russia:
 4276 4417 5763 7686
-    
+
+---
+[![Download Commandoro](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/commandoro/files/latest/download)
+
+---
+[![Download Commandoro](https://img.shields.io/sourceforge/dt/commandoro.svg)](https://sourceforge.net/projects/commandoro/files/latest/download)

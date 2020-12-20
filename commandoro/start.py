@@ -116,7 +116,6 @@ def createParser():
 def logo(func):
     parser = createParser()
     namespace = parser.parse_args()
-    print(namespace)
     if namespace.path:
         path = namespace.path
     else:

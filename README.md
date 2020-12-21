@@ -1,10 +1,9 @@
 Commandoro
 ===
 
->Utility for automatic command execution
+    Utility for automatic command execution
 
----
-    Created: Aleksandr Suvorov
+>Created: Aleksandr Suvorov
 ---
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)
@@ -20,6 +19,10 @@ Commandoro
 ---
 [![Download Commandoro](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/commandoro/files/latest/download)
 [![Download Commandoro](https://img.shields.io/sourceforge/dt/commandoro.svg)](https://sourceforge.net/projects/commandoro/files/latest/download)
+---
+
+![Image alt](https://github.com/mysmarthub/commandoro/raw/master/images/logo.png)
+
 ---
 
 Help the project financially:
@@ -180,14 +183,15 @@ Links:
 >[Sourceforge](https://sourceforge.net/projects/commandoro/files/latest/download)
 ---
 
-Disclaimer
----
-
-> Attention!
-> Be very careful with the commands you pass to the program.
-> The author of the program does not bear any responsibility for your actions, but
-> provides only an automated shell for executing commands on your system.
----
+Disclaimer of liability:
+------------------------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 Support:
 ---

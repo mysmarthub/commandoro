@@ -21,7 +21,7 @@ Commandoro
 [![Download Commandoro](https://img.shields.io/sourceforge/dt/commandoro.svg)](https://sourceforge.net/projects/commandoro/files/latest/download)
 ---
 
-![Image alt](https://github.com/mysmarthub/commandoro/raw/master/images/logo.png)
+![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/logo.png)
 
 ---
 

@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 COLUMNS, _ = shutil.get_terminal_size()
-VERSION = '0.0.3'
+VERSION = '0.0.4'
 
 
 def check_path(path):
@@ -30,10 +30,10 @@ def open_json(file):
 
 
 def execute_the_command(command: str):
-    # if type(command) is str:
-    #     status = os.system(command)
-    #     if not status:
-    #         return True
+    if type(command) is str:
+        status = os.system(command)
+        if not status:
+            return True
     return False
 
 

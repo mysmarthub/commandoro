@@ -70,13 +70,7 @@
     "sudo dnf install gstreamer1-plugins-good gstreamer1-plugins-ugly",
     "sudo dnf install lame-libs",
     "sudo dnf install ffmpeg-libs",
-    "sudo dnf install compat-ffmpeg28",
-    "pip install virtualenv",
-    "pip install wheel",
-    "pip install mycleaner",
-    "pip install smartcleaner",
-    "pip install sfd",
-    "pip install mpassgen"
+    "sudo dnf install compat-ffmpeg28"
   ],
   "Manjaro": [
     "pacman-mirrors --fasttrack",
@@ -92,12 +86,6 @@
     "pacman -Sy tree",
     "pacman -Sy mc",
     "pacman -Sy vlc",
-    "pip install virtualenv",
-    "pip install wheel",
-    "pip install mycleaner",
-    "pip install smartcleaner",
-    "pip install sfd",
-    "pip install mpassgen",
     "sudo echo GRUB_TIMEOUT=30 >> /etc/default/grub",
     "sudo echo GRUB_GFXMODE=1280x1024 >> /etc/default/grub",
     "sudo echo ENABLED=yes >> /etc/default/ufw",
@@ -108,5 +96,17 @@
     "sudo ufw status verbose",
     "sudo update-grub",
     "sudo sysctl -p"
+  ],
+  "default": [
+    "sudo touch .gitconfig",
+    "pip install virtualenv",
+    "pip install pipenv",
+    "pip install wheel",
+    "pip install mycleaner",
+    "pip install smartcleaner",
+    "pip install sfd",
+    "pip install mpassgen",
+    "pip install commandoro",
+    "pip install linuxautofix"
   ]
 }

@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 COLUMNS, _ = shutil.get_terminal_size()
-VERSION = '0.0.2'
+VERSION = '0.0.3'
 
 
 def check_path(path):
@@ -70,6 +70,8 @@ def start(conf_dict):
             print('Invalid input!!!')
             continue
         fix_name, fix_list = conf_dict[conf_number]
+        default_list = [v for val in conf_dict.values() if val[0] == 'default' for v in val[1]]
+        merged_list = fix_list + default_list
         while True:
             print(f'Selected {fix_name}'.center(COLUMNS, '='))
             print(''.center(COLUMNS, '-'))
@@ -79,7 +81,7 @@ def start(conf_dict):
             print(''.center(COLUMNS, '-'))
             user_input = get_input()
             if user_input == 1:
-                for fix in fix_list:
+                for fix in merged_list:
                     print('\n')
                     print(f'Execute: {fix}'.center(COLUMNS, '-'))
                     print(f'[Execute]: {fix}')
@@ -92,7 +94,7 @@ def start(conf_dict):
                         print('Error! Command not executed!')
                 break
             elif user_input == 2:
-                for fix in fix_list:
+                for fix in merged_list:
                     print(fix)
                 continue
             break

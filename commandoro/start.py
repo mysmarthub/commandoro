@@ -30,10 +30,10 @@ def open_json(file):
 
 
 def execute_the_command(command: str):
-    if type(command) is str:
-        status = os.system(command)
-        if not status:
-            return True
+    # if type(command) is str:
+    #     status = os.system(command)
+    #     if not status:
+    #         return True
     return False
 
 
@@ -70,8 +70,9 @@ def start(conf_dict):
             print('Invalid input!!!')
             continue
         fix_name, fix_list = conf_dict[conf_number]
-        default_list = [v for val in conf_dict.values() if val[0] == 'default' for v in val[1]]
-        merged_list = fix_list + default_list
+        if fix_name != 'default':
+            default_list = [v for val in conf_dict.values() if val[0] == 'default' for v in val[1]]
+            fix_list += default_list
         while True:
             print(f'Selected {fix_name}'.center(COLUMNS, '='))
             print(''.center(COLUMNS, '-'))
@@ -81,11 +82,12 @@ def start(conf_dict):
             print(''.center(COLUMNS, '-'))
             user_input = get_input()
             if user_input == 1:
-                for fix in merged_list:
+                count = 0
+                for fix in fix_list:
+                    count += 1
                     print('\n')
-                    print(f'Execute: {fix}'.center(COLUMNS, '-'))
+                    print(f'Execute {count}'.center(COLUMNS, '-'))
                     print(f'[Execute]: {fix}')
-                    print(f'Execute: {fix}'.center(COLUMNS, '-'))
                     status = execute_the_command(fix)
                     print(''.center(COLUMNS, '-'))
                     if status:
@@ -94,7 +96,7 @@ def start(conf_dict):
                         print('Error! Command not executed!')
                 break
             elif user_input == 2:
-                for fix in merged_list:
+                for fix in fix_list:
                     print(fix)
                 continue
             break

@@ -6,15 +6,15 @@ Commandoro
 >Created: Aleksandr Suvorov
 ---
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
-![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)
-![PyPI - Wheel](https://img.shields.io/pypi/wheel/commandoro)
-![GitHub all releases](https://img.shields.io/github/downloads/mysmarthub/commandoro/total)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/commandoro)
-![GitHub](https://img.shields.io/github/license/mysmarthub/commandoro)
-![GitHub Repo stars](https://img.shields.io/github/stars/mysmarthub/commandoro?style=social)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysmarthub/commandoro)
+[![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)](http://pypi.org/project/commandoro)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/commandoro)](http://pypi.org/project/commandoro)
+[![PyPI - Wheel](https://img.shields.io/pypi/wheel/commandoro)](http://pypi.org/project/commandoro)
+[![GitHub all releases](https://img.shields.io/github/downloads/mysmarthub/commandoro/total)](https://github.com/mysmarthub/commandoro)
+[![GitHub](https://img.shields.io/github/license/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
+[![GitHub Repo stars](https://img.shields.io/github/stars/mysmarthub/commandoro?style=social)](https://github.com/mysmarthub/commandoro)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/mysmarthub/commandoro)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mysmarthub/commandoro)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
 
 ---
 [![Download Commandoro](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/commandoro/files/latest/download)

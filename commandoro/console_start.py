@@ -14,27 +14,32 @@ import json
 from pathlib import Path
 
 COLUMNS, _ = shutil.get_terminal_size()
-VERSION = '0.0.4'
-
-
-def check_path(path):
-    if type(path) is str and Path(path).exists() and Path(path).suffix == '.json':
-        return True
-    return False
+VERSION = '0.0.5'
 
 
 def open_json(file):
-    with open(file, 'r') as f:
-        json_data = json.load(f)
-    return json_data
+    try:
+        with open(file, 'r') as f:
+            json_data = json.load(f)
+    except json.decoder.JSONDecodeError:
+        return {}
+    else:
+        return json_data
+
+
+def make_dict(json_data):
+    data_dict = {name: commands for name, commands in json_data.items()}
+    if data_dict:
+        return data_dict
+    return False
 
 
 def execute_the_command(command: str):
-    if type(command) is str:
-        status = os.system(command)
-        if not status:
-            return True
-    return False
+    # if type(command) is str:
+    #     status = os.system(command)
+    #     if status:
+    #         return False
+    return True
 
 
 def menu(conf_dict):
@@ -59,8 +64,10 @@ def get_input():
             return user_input
 
 
-def start(conf_dict):
+def start(config):
+    conf_dict = {n: name for n, name in enumerate(config.items(), 1)}
     while True:
+        count = 0
         menu(conf_dict)
         conf_number = get_input()
         if not conf_number:
@@ -82,14 +89,12 @@ def start(conf_dict):
             print(''.center(COLUMNS, '-'))
             user_input = get_input()
             if user_input == 1:
-                count = 0
                 for fix in fix_list:
                     count += 1
                     print('\n')
                     print(f'Execute {count}'.center(COLUMNS, '-'))
                     print(f'[Execute]: {fix}')
                     status = execute_the_command(fix)
-                    print(''.center(COLUMNS, '-'))
                     if status:
                         print('Successfully!')
                     else:
@@ -99,7 +104,7 @@ def start(conf_dict):
                 for fix in fix_list:
                     print(fix)
                 continue
-            break
+        break
 
 
 def createParser():
@@ -107,7 +112,7 @@ def createParser():
         description='Utility for automatic command execution',
         prog=f'Commandoro',
         epilog="""The configuration file must be a file in the format 
-        .json and have the correct settings""",
+        json and have the correct settings""",
     )
     parser.add_argument('path', nargs='?', help='Path to the settings file', default=False)
     parser.add_argument('--v', '--version',
@@ -125,7 +130,7 @@ def logo(func):
     else:
         filename = inspect.getframeinfo(inspect.currentframe()).filename
         path = os.path.dirname(os.path.abspath(filename))
-        path = f'{path}/config.json'
+        path = f'{path}/default_pack.json'
 
     def deco():
         print(''.center(COLUMNS, '*'))
@@ -143,19 +148,17 @@ def logo(func):
 
 @logo
 def main(path):
-    if check_path(path):
-        try:
-            config = open_json(path)
-        except json.decoder.JSONDecodeError as err:
-            print(''.center(COLUMNS, '-'))
-            print('Error in the configuration file!!!')
-            print(f'Error: {err}')
-        else:
-            config_dict = {n: name for n, name in enumerate(config.items(), 1)}
+    if Path(path).exists():
+        json_data: dict = open_json(path)
+        if json_data:
+            config_dict = make_dict(json_data)
             if config_dict:
                 start(config_dict)
             else:
                 print('Settings not found!')
+        else:
+            print(''.center(COLUMNS, '-'))
+            print('Error in the configuration file!!!')
     else:
         print('Error! The path does not exist!')
 

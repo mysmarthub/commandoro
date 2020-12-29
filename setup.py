@@ -61,6 +61,6 @@ setup(
     keywords=KEYWORDS,
     entry_points={
         'console_scripts':
-            ['commandoro = commandoro.start:main']
+            ['commandoro = commandoro.console_start:main']
         }
 )

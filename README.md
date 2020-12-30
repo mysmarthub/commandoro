@@ -23,7 +23,7 @@ Commandoro
 
 The console version:
 ---
-![Commandoro console version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_console.png)
+![Commandoro console version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro.png)
 
 >The console version allows you to run a script in the terminal, 
 passing it a file with settings as an argument, 

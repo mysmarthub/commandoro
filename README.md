@@ -75,6 +75,12 @@ https://paypal.me/myhackband
 Description
 ---
 
+>Attention! Some commands require you to run as an administrator.
+> To run some commands in graphical mode, 
+> you need to install dependencies on the administrator name:
+
+    sudo pip install -r commandoro/requirements.txt
+
 >Console and graphical versions are available.
 
 >With this utility, you can automate

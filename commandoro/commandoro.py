@@ -144,6 +144,8 @@ def start_execute(pack_dict):
                         print(f'Completed. Successfully: [{len(command_list) - errors}] | Errors: [{errors}]\n')
                         break
                     elif user_input == 2:
+                        print(''.center(COLUMNS, '-'))
+                        print(f'Commands for {pack_name}:\n')
                         for command in command_list:
                             print(command)
                         continue

@@ -85,7 +85,8 @@ class Exec(QThread):
             self.signal2.emit(count)
         self.send_emit(''.center(COLUMNS, '-'))
         self.send_emit(f'The work has been completed. '
-                       f'Executed commands: {len(self.commands_pack)} | Errors: {len(self.errors)}')
+                       f'Executed commands: {len(self.commands_pack)} | '
+                       f'Errors: {len(self.errors)}')
         self.send_emit(''.center(COLUMNS, '-'))
         if self.errors:
             self.send_emit('Errors:')
@@ -482,6 +483,9 @@ class MyWindow(QWidget):
     def at_finish(self) -> None:
         self.from_disable(False)
         self.progress_bar.setValue(100)
+        self.show_msg(title='The program is completed',
+                      msg=f'Completed commands: {len(self.my_exec.commands_pack)} '
+                          f'| Errors: {len(self.my_exec.errors)}')
         self.my_exec.reset()
 
     def get_default_file(self):

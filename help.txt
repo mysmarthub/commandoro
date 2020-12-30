@@ -1,4 +1,0 @@
-Select the command package and click apply or open the command file.
-Click execute to start executing commands.
-You can add new commands, delete unnecessary ones,
-to save changes to the settings file, click save.

@@ -25,7 +25,8 @@ from PySide2.QtWidgets import (QApplication, QFileDialog, QMessageBox, QLabel, Q
 from PySide2.QtCore import QThread, Signal
 
 VERSION = '0.0.5'
-COLUMNS, _ = shutil.get_terminal_size()
+# COLUMNS, _ = shutil.get_terminal_size()
+COLUMNS = 60
 LOG_NAME = 'commandoro_log.txt'
 
 
@@ -124,7 +125,7 @@ class MyWindow(QWidget):
 
         self.setWindowTitle('Commandoro - utility for automating the execution '
                             'of commands in different systems, Create and edit '
-                            'your own files with command packages.')
+                            'your own files with command packages...')
 
         self.label_logo = QLabel(f'Commandoro<sup>{VERSION}</sup>')
         self.label_logo.setAlignment(Qt.AlignCenter)
@@ -134,7 +135,7 @@ class MyWindow(QWidget):
         self.text_console = QTextBrowser()
         self.text_console.setText(f'Welcome to the Utility for automating '
                                   f'the execution of commands in different systems, '
-                                  f'сreate and edit your own files with command packages')
+                                  f'сreate and edit your own files with command packages...')
         self.text_console.append(''.center(COLUMNS, '='))
         self.btn_show_help = QPushButton('Help')
         self.btn_console_clear = QPushButton('Clear the console')
@@ -307,15 +308,16 @@ class MyWindow(QWidget):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         self.clear_console()
         try:
-            with open('help.txt', 'r') as f:
+            with open('README.md', 'r') as f:
                 self.print_console(f.read())
         except FileNotFoundError:
             self.print_console('Error! Help file not found!')
 
     def clear_console(self):
         self.text_console.clear()
-        self.text_console.setText('Welcome to the utility for '
-                                  'automatic command execution...')
+        self.text_console.setText(f'Welcome to the Utility for automating '
+                                  f'the execution of commands in different systems, '
+                                  f'сreate and edit your own files with command packages...')
         self.text_console.append(''.center(COLUMNS, '='))
 
     def print_console(self, msg):
@@ -391,7 +393,8 @@ class MyWindow(QWidget):
         items = self.list_options.selectedItems()
         if items:
             item = items[0]
-            c, s = QInputDialog.getText(self, f'Rename {item.text()}?', 'Enter a new name for the package: ',
+            c, s = QInputDialog.getText(self, f'Rename {item.text()}?',
+                                        'Enter a new name for the package: ',
                                         text=f'{item.text()}')
             if c and s and c not in self.options_dict:
                 temp = self.options_dict[item.text()]
@@ -413,7 +416,8 @@ class MyWindow(QWidget):
         items = self.list_options.selectedItems()
         if items:
             item = items[0]
-            c, s = QInputDialog.getText(self, 'Input Dialog', 'Enter the command:', text=f'New command')
+            c, s = QInputDialog.getText(self, 'Input Dialog', 'Enter the command:',
+                                        text=f'New command')
             if s and c:
                 self.add_item(self.list_commands, c)
                 self.options_dict[item.text()].append(c)
@@ -425,7 +429,8 @@ class MyWindow(QWidget):
         items = self.list_options.selectedItems()
         if items:
             item = items[0]
-            command_list = [self.list_commands.item(i).text() for i in range(self.list_commands.count())]
+            command_list = [self.list_commands.item(i).text() for i in
+                            range(self.list_commands.count())]
             if 'default' in [self.list_options.item(i).text() for i in
                              range(self.list_options.count())] and item.text() != 'default':
                 command_list += [self.list_commands_default.item(i).text() for i in

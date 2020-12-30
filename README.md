@@ -1,9 +1,9 @@
 Commandoro
 ===
 
-    Utility for automatic command execution
+>Console and graphical utility for automating command execution.
 
->Created: Aleksandr Suvorov
+    Created: Aleksandr Suvorov
 ---
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
 [![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)](http://pypi.org/project/commandoro)
@@ -21,7 +21,41 @@ Commandoro
 [![Download Commandoro](https://img.shields.io/sourceforge/dt/commandoro.svg)](https://sourceforge.net/projects/commandoro/files/latest/download)
 ---
 
-![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/logo.png)
+The console version:
+---
+![Commandoro console version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_console.png)
+
+>The console version allows you to run a script in the terminal, 
+passing it a file with settings as an argument, 
+or use the default file. In the process, you select the desired 
+command package, then you can start execution, 
+display a list of commands for this package, 
+or return to the selection of the command package. 
+After executing all the commands, 
+the program goes to the main menu and again waits for 
+input to select the desired package, or exit the program.
+> 
+> During execution, it displays information about the 
+command number, the command itself, and the status 
+of its execution. Upon completion, 
+it displays information about the number of executed commands, 
+and the number of errors during execution.
+
+---
+The GUI version:
+---
+![Commandoro gui version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_gui.png)
+
+
+>The graphical version allows you to open files with 
+command packages, change, add, delete packages, 
+save changes to a file, save all changes to a new file, 
+view commands from each package, change, add and delete commands. 
+Execute commands without saving to a file, 
+edit packages and commands without saving, 
+add, remove, and modify the default package and commands from this package. 
+It has the function of recording work in a log file.
+
 
 ---
 
@@ -41,45 +75,51 @@ https://paypal.me/myhackband
 Description
 ---
 
+>Console and graphical versions are available.
+
 >With this utility, you can automate
 the execution of commands on a Linux system.
-Create a settings file with the necessary items,
-or use/edit the default file.
-In each item, collect the necessary commands,
+Create a file with command packages or use and 
+edit the default file. In the settings file, create 
+new command packages, use the key as the package name, 
+and the value as the list of commands (see the default file).
+
+>In each item, collect the necessary commands,
 and start their automatic execution when necessary.
 
 >With this utility, it is very convenient 
-to perform routine tasks , as well as configure 
-and install the system after installation.
+to perform routine tasks, automatically execute the necessary commands, 
+and also configure the system after installation.
 
 >The settings file is very simple and clear, 
 and all the commands you need for different 
 cases or different systems will be stored in one place.
+You will not need to keep them in memory, 
+in different files, enter them manually or search the Internet.
 
->In the settings file, a section with a special 
-name default is available, 
-any commands added to this section 
-will be executed by default after the 
-main commands are executed.
+>In the settings file, there is a section from which commands 
+will be executed in any case. 
+This is done in order to bring common commands 
+for all command packages into a single default package.
 
 >You can create your own files with settings
 or edit the default settings file. 
 If you have created your own settings file, 
 just specify the full path to this file when 
 running the script as a parameter. 
-Keep in mind that at the moment the file 
-must be in json format, have this file extension, 
-and use the required structure:
+If you are using the graphical version of the program, 
+just open the file with the settings using the open button.
+The file must be in json format and have the required structure.
 
 >The section with the "default" commands will run anyway.
 
 ```json
 {
-  "Name to be displayed in the list of commands": [
+  "Commands pack name": [
     "command one",
     "command two"
   ],
-  "Next name": [
+  "Next commands pack name": [
     "command one",
     "command two"
   ],
@@ -149,12 +189,26 @@ Installation and launch:
 >You can download the source files and run using Python:
 
 ```
-git clone https://github.com/mysmarthub/commandoro.git
-python commandoro/commandoro/start.py
- 
- or
+    git clone https://github.com/mysmarthub/commandoro.git
+    
+    python commandoro/commandoro/commandoro.py
+     
+     or
+    
+    sudo python commandoro/commandoro/commandoro.py
+    
+    Commandoro Gui:
+    ---------------
+    
+    pip install -r commandoro/requirements.txt 
+    python commandoro/commandoro_gui.py
+    
+    Sudo Commandoro Gui:
+    --------------------
+    
+    sudo pip install -r commandoro/requirements.txt 
+    sudo python commandoro/commandoro_gui.py
 
-sudo python commandoro/commandoro/start.py
 ```
 
 >When creating your own files, use
@@ -162,11 +216,11 @@ the structure from the default file.
 
 ```json
 {
-  "Name to be displayed in the list of commands": [
+  "Commands pack name": [
     "command one",
     "command two"
   ],
-  "Next name": [
+  "Next commands pack name": [
     "command one",
     "command two"
   ]

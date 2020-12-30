@@ -35,84 +35,19 @@ def make_dict(json_data):
 
 
 def execute_the_command(command: str):
-    # if type(command) is str:
-    #     status = os.system(command)
-    #     if status:
-    #         return False
+    if type(command) is str:
+        status = os.system(command)
+        if status:
+            return False
     return True
-
-
-def menu(conf_dict):
-    print(''.center(COLUMNS, '*'))
-    print('Configuration Settings'.center(COLUMNS, '='))
-    print(''.center(COLUMNS, '-'))
-    for n, val in conf_dict.items():
-        name = val[0]
-        command_list = val[1]
-        print(f'{n}: {name} | commands: [{len(command_list)}]')
-    print(''.center(COLUMNS, '-'))
-
-
-def get_input():
-    while True:
-        try:
-            user_input = int(input('Enter the number to select, to exit enter 0: '))
-        except ValueError:
-            print('Input Error!')
-            continue
-        else:
-            return user_input
-
-
-def start(config):
-    conf_dict = {n: name for n, name in enumerate(config.items(), 1)}
-    while True:
-        count = 0
-        menu(conf_dict)
-        conf_number = get_input()
-        if not conf_number:
-            print('Getting out...')
-            break
-        if conf_number not in conf_dict.keys():
-            print('Invalid input!!!')
-            continue
-        fix_name, fix_list = conf_dict[conf_number]
-        if fix_name != 'default':
-            default_list = [v for val in conf_dict.values() if val[0] == 'default' for v in val[1]]
-            fix_list += default_list
-        while True:
-            print(f'Selected {fix_name}'.center(COLUMNS, '='))
-            print(''.center(COLUMNS, '-'))
-            print(f'1 - Start\n'
-                  f'2 - List of commands\n'
-                  f'0 - Cancel')
-            print(''.center(COLUMNS, '-'))
-            user_input = get_input()
-            if user_input == 1:
-                for fix in fix_list:
-                    count += 1
-                    print('\n')
-                    print(f'Execute {count}'.center(COLUMNS, '-'))
-                    print(f'[Execute]: {fix}')
-                    status = execute_the_command(fix)
-                    if status:
-                        print('Successfully!')
-                    else:
-                        print('Error! Command not executed!')
-                break
-            elif user_input == 2:
-                for fix in fix_list:
-                    print(fix)
-                continue
-        break
 
 
 def createParser():
     parser = argparse.ArgumentParser(
         description='Utility for automatic command execution',
         prog=f'Commandoro',
-        epilog="""The configuration file must be a file in the format 
-        json and have the correct settings""",
+        epilog="""The configuration file must be a file in the format
+        json and have the correct settings.""",
     )
     parser.add_argument('path', nargs='?', help='Path to the settings file', default=False)
     parser.add_argument('--v', '--version',
@@ -122,7 +57,7 @@ def createParser():
     return parser
 
 
-def logo(func):
+def get_args(func):
     parser = createParser()
     namespace = parser.parse_args()
     if namespace.path:
@@ -135,8 +70,9 @@ def logo(func):
     def deco():
         print(''.center(COLUMNS, '*'))
         print('Commandoro'.center(COLUMNS, '='))
-        print('Aleksandr Suvorov | myhackband@ya.ru'.center(COLUMNS, '-'))
-        print(f'Utility for automatic command execution'.center(COLUMNS, '='))
+        print(' Aleksandr Suvorov | https://github.com/mysmarthub '.center(COLUMNS, '-'))
+        print(f' Utility for automatic command execution '.center(COLUMNS, '='))
+        print(' Donate: 4048 4150 0400 5852 '.center(COLUMNS, '*'))
         if path:
             func(path)
         else:
@@ -146,18 +82,92 @@ def logo(func):
     return deco
 
 
-@logo
+def get_input():
+    try:
+        user_input = int(input('Enter the number to select, to exit enter 0: '))
+    except ValueError:
+        return -1
+    else:
+        return user_input
+
+
+def get_pack_name(pack_dict):
+    num_pack_dict = {n: name for n, name in enumerate(pack_dict.items(), 1)}
+    print('Command packages'.center(COLUMNS, '='))
+    for n, val in num_pack_dict.items():
+        name = val[0]
+        command_list = val[1]
+        print(f'{n}: {name} | commands: [{len(command_list)}]')
+    print(''.center(COLUMNS, '-'))
+    while True:
+        user_input = get_input()
+        if user_input in num_pack_dict:
+            name = num_pack_dict[user_input][0]
+            return name
+        elif not user_input:
+            return False
+        else:
+            print('Invalid input!!!')
+            continue
+
+
+def start_execute(pack_dict):
+    while True:
+        command_list = []
+        pack_name = get_pack_name(pack_dict)
+        if pack_name:
+            command_list += pack_dict[pack_name]
+            if pack_name != 'default' and 'default' in pack_dict:
+                command_list += pack_dict['default']
+            if command_list:
+                while True:
+                    count = 0
+                    errors = 0
+                    print(f' Selected {pack_name} | Commands: [{len(command_list)}] '.center(COLUMNS, '='))
+                    print(f'1 - Start\n'
+                          f'2 - List of commands\n'
+                          f'0 - Cancel')
+                    print(''.center(COLUMNS, '-'))
+                    user_input = get_input()
+                    if user_input == 1:
+                        for command in command_list:
+                            count += 1
+                            print('\n')
+                            print(f'{count}. [Execute]: {command}')
+                            status = execute_the_command(command)
+                            if status:
+                                print('Successfully!')
+                            else:
+                                errors += 1
+                                print('Error! Command not executed!')
+                        print(''.center(COLUMNS, '='))
+                        print(f'Completed. Successfully: [{len(command_list) - errors}] | Errors: [{errors}]\n')
+                        break
+                    elif user_input == 2:
+                        for command in command_list:
+                            print(command)
+                        continue
+                    elif not user_input:
+                        break
+                    else:
+                        print('Invalid input!!!')
+                        continue
+            else:
+                print('Commands not found...')
+
+        else:
+            print('Getting out...')
+            break
+
+
+@get_args
 def main(path):
     if Path(path).exists():
         json_data: dict = open_json(path)
         if json_data:
-            config_dict = make_dict(json_data)
-            if config_dict:
-                start(config_dict)
-            else:
-                print('Settings not found!')
+            pack_dict = make_dict(json_data)
+            start_execute(pack_dict)
         else:
-            print(''.center(COLUMNS, '-'))
             print('Error in the configuration file!!!')
     else:
         print('Error! The path does not exist!')

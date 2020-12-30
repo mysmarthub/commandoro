@@ -41,10 +41,10 @@ def open_json(file):
 
 
 def execute_the_command(command: str):
-    # if type(command) is str:
-    #     status = os.system(command)
-    #     if status:
-    #         return False
+    if type(command) is str:
+        status = os.system(command)
+        if status:
+            return False
     return True
 
 

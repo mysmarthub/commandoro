@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-# Copyright © 2020 Aleksandr Suvorov
-# Licensed under the terms of the MIT License
-# (see LICENSE.txt for details)
+# Licensed under the terms of the BSD 3-Clause License
+# (see LICENSE for details)
+# Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
-"""Utility for automatic command execution"""
+"""Console utility for automatic command execution"""
 import argparse
 import inspect
 import os
@@ -13,32 +13,30 @@ import shutil
 import json
 from pathlib import Path
 
-COLUMNS, _ = shutil.get_terminal_size()
-VERSION = '0.0.5'
+VERSION = '0.0.6'
+
+
+def smart_print(text='', char='-'):
+    columns, _ = shutil.get_terminal_size()
+    print(f'{text}'.center(columns, char))
 
 
 def open_json(file):
     try:
         with open(file, 'r') as f:
             json_data = json.load(f)
-    except json.decoder.JSONDecodeError:
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
         return {}
     else:
         return json_data
 
 
-def make_dict(json_data):
-    data_dict = {name: commands for name, commands in json_data.items()}
-    if data_dict:
-        return data_dict
-    return False
-
-
-def execute_the_command(command: str):
-    if type(command) is str:
-        status = os.system(command)
-        if status:
-            return False
+def executor(command: str, test=False):
+    if not test:
+        if type(command) is str:
+            status = os.system(command)
+            if status:
+                return False
     return True
 
 
@@ -49,42 +47,15 @@ def createParser():
         epilog="""The configuration file must be a file in the format
         json and have the correct settings.""",
     )
-    parser.add_argument('path', nargs='?', help='Path to the settings file', default=False)
-    parser.add_argument('--v', '--version',
-                        action='version',
-                        help='Program version',
+    parser.add_argument('--v', '--version', action='version', help='Program version',
                         version='%(prog)s v{}'.format(VERSION))
+    parser.add_argument('path', nargs='?', help='Path to the settings file', default=False)
     return parser
-
-
-def get_args(func):
-    parser = createParser()
-    namespace = parser.parse_args()
-    if namespace.path:
-        path = namespace.path
-    else:
-        filename = inspect.getframeinfo(inspect.currentframe()).filename
-        path = os.path.dirname(os.path.abspath(filename))
-        path = f'{path}/default_pack.json'
-
-    def deco():
-        print(''.center(COLUMNS, '*'))
-        print('Commandoro'.center(COLUMNS, '='))
-        print(' Aleksandr Suvorov | https://github.com/mysmarthub '.center(COLUMNS, '-'))
-        print(f' Utility for automatic command execution '.center(COLUMNS, '='))
-        print(' Donate: 4048 4150 0400 5852 '.center(COLUMNS, '*'))
-        if path:
-            func(path)
-        else:
-            parser.print_help()
-        print(''.center(COLUMNS, '='))
-        print('Program completed'.center(COLUMNS, '-'))
-    return deco
 
 
 def get_input():
     try:
-        user_input = int(input('Enter the number to select, to exit enter 0: '))
+        user_input = int(input('Enter the number to select: '))
     except ValueError:
         return -1
     else:
@@ -93,12 +64,12 @@ def get_input():
 
 def get_pack_name(pack_dict):
     num_pack_dict = {n: name for n, name in enumerate(pack_dict.items(), 1)}
-    print('Command packages'.center(COLUMNS, '='))
+    smart_print('Command packages', '=')
     for n, val in num_pack_dict.items():
         name = val[0]
         command_list = val[1]
         print(f'{n}: {name} | commands: [{len(command_list)}]')
-    print(''.center(COLUMNS, '-'))
+    smart_print()
     while True:
         user_input = get_input()
         if user_input in num_pack_dict:
@@ -111,64 +82,100 @@ def get_pack_name(pack_dict):
             continue
 
 
-def start_execute(pack_dict):
-    while True:
-        command_list = []
-        pack_name = get_pack_name(pack_dict)
-        if pack_name:
-            command_list += pack_dict[pack_name]
-            if pack_name != 'default' and 'default' in pack_dict:
-                command_list += pack_dict['default']
-            if command_list:
-                while True:
-                    count = 0
-                    errors = 0
-                    print(f' Selected {pack_name} | Commands: [{len(command_list)}] '.center(COLUMNS, '='))
-                    print(f'1 - Start\n'
-                          f'2 - List of commands\n'
-                          f'0 - Cancel')
-                    print(''.center(COLUMNS, '-'))
-                    user_input = get_input()
-                    if user_input == 1:
-                        for command in command_list:
-                            count += 1
-                            print('\n')
-                            print(f'{count}. [Execute]: {command}')
-                            status = execute_the_command(command)
-                            if status:
-                                print('Successfully!')
-                            else:
-                                errors += 1
-                                print('Error! Command not executed!')
-                        print(''.center(COLUMNS, '='))
-                        print(f'Completed. Successfully: [{len(command_list) - errors}] | Errors: [{errors}]\n')
-                        break
-                    elif user_input == 2:
-                        print(''.center(COLUMNS, '-'))
-                        print(f'Commands for {pack_name}:\n')
-                        for command in command_list:
-                            print(command)
-                        continue
-                    elif not user_input:
-                        break
-                    else:
-                        print('Invalid input!!!')
-                        continue
-            else:
-                print('Commands not found...')
+def get_action():
+    print(f'1 - Start\n'
+          f'2 - List of commands\n'
+          f'3 - Cancel')
+    smart_print()
+    return get_input()
 
+
+def get_args(func):
+    parser = createParser()
+    namespace = parser.parse_args()
+    if not namespace.path:
+        filename = inspect.getframeinfo(inspect.currentframe()).filename
+        folder = os.path.dirname(os.path.abspath(filename))
+        namespace.path = f'{folder}/commandoro/default_pack.json'
+        if not Path(namespace.path).exists():
+            namespace.path = f'{folder}/default_pack.json'
+
+    def deco():
+        smart_print('', '*')
+        smart_print(f'Commandoro {VERSION}', '=')
+        smart_print(' Aleksandr Suvorov | https://github.com/mysmarthub ', '-')
+        smart_print(' Utility for automatic command execution ', '=')
+        smart_print(' Donate: 4048 4150 0400 5852 ', '*')
+        func(namespace)
+        print()
+        smart_print(' Donate: 4048 4150 0400 5852 ', '-')
+        smart_print(' Copyright © 2020-2021 Aleksandr Suvorov ', '=')
+        smart_print('Program completed', '-')
+    return deco
+
+
+def execute_the_command(command_list, test=False):
+    count = 0
+    errors = 0
+    for command in command_list:
+        count += 1
+        print('\n')
+        print(f'{count}. [Execute]: {command}')
+        status = executor(command, test=test)
+        if status:
+            print('Successfully!')
         else:
-            print('Getting out...')
-            break
+            errors += 1
+            print('Error! Command not executed!')
+    smart_print('', '=')
+    print(f'Completed. Successfully: [{len(command_list) - errors}] | Errors: [{errors}]\n')
 
 
 @get_args
-def main(path):
-    if Path(path).exists():
+def main(namespace):
+    path = namespace.path
+    if path:
         json_data: dict = open_json(path)
         if json_data:
-            pack_dict = make_dict(json_data)
-            start_execute(pack_dict)
+            try:
+                while True:
+                    smart_print()
+                    print('Press Ctrl+C to exit...')
+                    pack_name = get_pack_name(json_data)
+                    while True:
+                        msg = f' Selected {pack_name} | Commands: [{len(json_data[pack_name])}] '
+                        if 'default' in json_data and pack_name != 'default':
+                            msg += f'+ default commands [{len(json_data["default"])}]'
+                        smart_print(msg, '=')
+                        action = get_action()
+                        if action == 1:
+                            command_list = json_data[pack_name]
+                            if 'default' in json_data and pack_name != 'default':
+                                command_list += json_data['default']
+                            execute_the_command(command_list, test=False)
+                            break
+                        elif action == 2:
+                            smart_print()
+                            print(f'Commands for {pack_name}:\n')
+                            for command in json_data[pack_name]:
+                                print(command)
+                            print()
+                            if 'default' in json_data and pack_name != 'default':
+                                print(f'Commands for default pack:\n')
+                                for command in json_data['default']:
+                                    print(command)
+                            smart_print()
+                            continue
+                        elif action == 3:
+                            break
+                        else:
+                            print('Invalid input!!!')
+                            continue
+            except KeyboardInterrupt:
+                print()
+                print('Exit...')
+            except TypeError:
+                print('Type Error in json file...')
         else:
             print('Error in the configuration file!!!')
     else:

@@ -3,7 +3,8 @@ Commandoro
 
 >Console and graphical utility for automating command execution.
 
-    Created: Aleksandr Suvorov
+>Created: Aleksandr Suvorov
+
 ---
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
 [![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)](http://pypi.org/project/commandoro)
@@ -23,7 +24,7 @@ Commandoro
 
 The console version:
 ---
-![Commandoro console version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro.png)
+![Commandoro console version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_logo.png)
 
 >The console version allows you to run a script in the terminal, 
 passing it a file with settings as an argument, 
@@ -44,8 +45,10 @@ and the number of errors during execution.
 ---
 The GUI version:
 ---
-![Commandoro gui version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_gui.png)
+![Commandoro gui version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_gui_logo.png)
 
+>Graphical utility for automating the execution of command packages, 
+their creation, storage, editing, and launch.
 
 >The graphical version allows you to open files with 
 command packages, change, add, delete packages, 

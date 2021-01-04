@@ -1,6 +1,4 @@
-include LICENSE.txt
-include README.txt
-include Pipfile
-include Pipfile.lock
+include LICENSE
+include README.md
 include commandoro/default_pack.json
-include commandoro/console_start.py
+include commandoro/commandoro.py

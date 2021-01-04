@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-# Copyright © 2020 Aleksandr Suvorov
-# Licensed under the terms of the MIT License
-# (see LICENSE.txt for details)
-# -----------------------------------------------------------------------------
-# Email: myhackband@yandex.ru
-# Github: https://github.com/mysmarthub/commandoro/
-# PyPi: https://pypi.org/project/commandoro/
+# Licensed under the terms of the BSD 3-Clause License
+# (see LICENSE for details)
+# Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
 from setuptools import setup, find_packages
 from os.path import join, dirname
@@ -17,10 +13,11 @@ VERSION = __import__(PACKAGE).__version__
 AUTHOR = __import__(PACKAGE).__author__
 AUTHOR_EMAIL = "myhackband@yandex.ru"
 DESCRIPTION = "Commandoro - utility for automatic command execution." \
-              " Aleksandr Suvorov | https://github.com/mysmarthub/ | Donate: 4276 4417 5763 7686"
+              " Aleksandr Suvorov | https://github.com/mysmarthub/ | " \
+              "Donate: 4048 4150 0400 5852 | 4276 4417 5763 7686"
 NAME = "commandoro"
 URL = "https://github.com/mysmarthub/commandoro"
-LICENSE = 'MIT'
+LICENSE = 'BSD 3-Clause License'
 LONG_DESCRIPTION = open(join(dirname(__file__), 'README.md')).read()
 INSTALL_REQUIRES = []
 PLATFORM = ['Linux', 'Windows']
@@ -29,7 +26,7 @@ CLASSIFIERS = [
     "Environment :: Console",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: BSD License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Operating System :: Microsoft :: Windows",

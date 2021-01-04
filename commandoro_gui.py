@@ -1,18 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-# Copyright © 2020 Aleksandr Suvorov
-# Licensed under the terms of the MIT License
-# (see LICENSE.txt for details)
+# Licensed under the terms of the BSD 3-Clause License
+# (see LICENSE for details)
+# Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
-"""Gui utility for automating the execution
-
-of commands in different systems,
-Create and edit your own files with command packages.
-"""
+"""Graphical utility for automating the execution of command packages,
+their creation, storage, editing, and launch."""
 import json
 import os
-import shutil
 import sys
 from pathlib import Path
 import time
@@ -24,35 +20,28 @@ from PySide2.QtWidgets import (QApplication, QFileDialog, QMessageBox, QLabel, Q
                                QProgressBar)
 from PySide2.QtCore import QThread, Signal
 
-VERSION = '0.0.5'
-# COLUMNS, _ = shutil.get_terminal_size()
+VERSION = '0.0.6'
 COLUMNS = 60
-LOG_NAME = 'commandoro_log.txt'
+LOG_NAME = 'command_execute_log.txt'
+
+
+def executor(command: str, test=False):
+    if not test:
+        if type(command) is str:
+            status = os.system(command)
+            if status:
+                return False
+    return True
 
 
 def open_json(file):
     try:
         with open(file, 'r') as f:
             json_data = json.load(f)
-    except json.decoder.JSONDecodeError:
-        return False
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        return {}
     else:
         return json_data
-
-
-def execute_the_command(command: str):
-    if type(command) is str:
-        status = os.system(command)
-        if status:
-            return False
-    return True
-
-
-def make_dict(json_data):
-    data_dict = {name: commands for name, commands in json_data.items()}
-    if data_dict:
-        return data_dict
-    return False
 
 
 class Exec(QThread):
@@ -76,7 +65,7 @@ class Exec(QThread):
             count += progress_step
             self.send_emit(''.center(COLUMNS, '-'))
             self.send_emit(f'{n} [Execute] {command}')
-            status = execute_the_command(command)
+            status = executor(command, test=False)
             if status:
                 self.send_emit(f'Command completed successfully')
             else:
@@ -124,9 +113,8 @@ class MyWindow(QWidget):
         self.options_file = ''
         self.options_dict = dict()
 
-        self.setWindowTitle('Commandoro - utility for automating the execution '
-                            'of commands in different systems, Create and edit '
-                            'your own files with command packages...')
+        self.setWindowTitle('Commandoro - graphical utility for automating the execution of command packages, '
+                            'their creation, storage, editing, and launch.')
 
         self.label_logo = QLabel(f'Commandoro<sup>{VERSION}</sup>')
         self.label_logo.setAlignment(Qt.AlignCenter)
@@ -495,21 +483,17 @@ class MyWindow(QWidget):
             self.open_file('default_pack.json')
 
     def open_file(self, file_name):
-        data: dict = open_json(file_name)
-        if data:
-            config_dict = make_dict(data)
-            if config_dict:
-                self.options_dict.clear()
-                self.list_commands_default.clear()
-                self.list_options.clear()
-                self.list_commands.clear()
-                self.options_file = file_name
-                self.options_dict = config_dict
-                self.print_console(f'Settings added successfully: {self.options_file}')
-                for name in config_dict.keys():
-                    self.add_item(self.list_options, name)
-            else:
-                self.print_console('Settings not found!')
+        config_dict = open_json(file_name)
+        if config_dict:
+            self.options_dict.clear()
+            self.list_commands_default.clear()
+            self.list_options.clear()
+            self.list_commands.clear()
+            self.options_file = file_name
+            self.options_dict = config_dict
+            self.print_console(f'Settings added successfully: {self.options_file}')
+            for name in config_dict.keys():
+                self.add_item(self.list_options, name)
         else:
             msg = f'Error in the configuration file: {file_name}'
             self.show_msg('Warning!', f'{msg}')

@@ -5,7 +5,11 @@
 # (see LICENSE for details)
 # Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
-"""Console utility for automatic command execution
+"""
+Console utility for automatic command execution
+
+Store commands for different tasks or systems in one
+place and execute them automatically.
 
 The console version allows you to run a script in the terminal,
 passing it a file with settings as an argument,
@@ -13,54 +17,33 @@ or use the default file. In the process, you select the desired
 command package, then you can start execution,
 display a list of commands for this package,
 or return to the selection of the command package.
+
 After executing all the commands,
 the program goes to the main menu and again waits for
 input to select the desired package, or exit the program.
 """
-import argparse
+import click
 import inspect
+import json
 import os
 import shutil
-import json
-from pathlib import Path
-
 
 __version__ = '0.0.7'
 __author__ = 'Aleksandr Suvorov'
+__description__ = 'CLI utility for automatic command execution'
 __url__ = 'https://githib.com/mysmarthub'
 __donate__ = 'Donate: https://yoomoney.ru/to/4100115206129186'
 __copyright__ = 'Copyright © 2020-2021 Aleksandr Suvorov'
 
 
-def smart_print(text: str = '', char: str = '-'):
-    """
-    Prints text to the console in the center of the line
+class Pack:
+    def __init__(self, name, command_list):
+        self.name = name
+        self.command_list = command_list
 
-    - Prints based on changing the width of the terminal
-
-    :param text: <str> The string to be output
-    :param char: <str> Placeholder character
-    :return: <None>
-    """
-    columns, _ = shutil.get_terminal_size()
-    print(f'{text}'.center(columns, char))
-
-
-def open_json(file: str) -> dict:
-    """
-    Open the settings file in json format.
-
-    :param file: <str> Path to the file in json format with command packages
-    :return: <dict> Dictionary with command packages, where the key is the name of the package,
-        and the value is a list of commands. If an error occurs, it returns an empty dictionary.
-    """
-    try:
-        with open(file, 'r') as f:
-            json_data = json.load(f)
-    except (json.decoder.JSONDecodeError, FileNotFoundError):
-        return {}
-    else:
-        return json_data
+    @property
+    def count(self):
+        return len(self.command_list)
 
 
 def executor(command: str, test: bool = False) -> bool:
@@ -79,197 +62,179 @@ def executor(command: str, test: bool = False) -> bool:
     return True
 
 
-def get_input() -> int:
+def open_file(file):
     """
-    Accepts input of digits from the user
+    Open the settings file in json format.
 
-    :return: <int> If the user entered a non-number,
-        it returns -1, otherwise the number entered by the user
+    :param file: <str> Path to the file in json format with command packages
+    :return: <dict> Dictionary with command packages, where the key is the name of the package,
+    and the value is a list of commands. If an error occurs, it returns an empty dictionary.
     """
     try:
-        user_input = int(input('Enter the number to select: '))
-    except ValueError:
-        return -1
+        with open(file, 'r') as f:
+            json_data = json.load(f)
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        return {}
     else:
-        return user_input
+        return json_data
 
 
-def get_action() -> int:
-    """
-    Display the command selection menu, get input
+def smart_print(text='', char='-'):
+    if not char:
+        char = ' '
+    columns, _ = shutil.get_terminal_size()
+    if text:
+        print(f' {text} '.center(columns, char))
+    else:
+        print(f''.center(columns, char))
 
-    :return: <int>  The number entered by the user
-    """
-    print(f'1 - Start\n'
-          f'2 - List of commands\n'
-          f'3 - Cancel')
+
+def start_logo():
+    smart_print('', '*')
+    smart_print(f'Commandoro {__version__} | Author: {__author__}', '=')
+    smart_print(f'{__description__}', ' ')
     smart_print()
-    return get_input()
 
 
-def execute_the_command(command_list: iter, test: bool = False):
-    """
-    Execute a list of commands
+def end_logo():
+    smart_print('Program completed', '-')
+    smart_print(f'{__donate__}', '-')
+    smart_print(f'https://www.paypal.com/paypalme/myhackband', '-')
+    smart_print(f'{__copyright__}', '=')
 
-    - display information about the command
-    - the status of its execution
-    - the command number
-    - information about errors that have occurred
 
-    :param command_list: <iter> Iterator containing strings with commands
-    :param test: <bool> Used for testing. True disables the actual execution of commands.
-    :return: <None>
-    """
+def get_pack_name(pack_objects: dict):
+    num_pack = {n: name for n, name in enumerate(pack_objects.keys(), 1)}
+    while 1:
+        """Shows a simple menu."""
+        smart_print('Command packages:')
+        for n, name in num_pack.items():
+            print(f'{n}. {name} | Commands[{pack_objects[name].count}]')
+        smart_print()
+        num = click.prompt(text='Enter the package number and click Enter '
+                                '(ctrl+c to exit): ', type=int)
+        pack_name = num_pack[num]
+        command_list = pack_objects[pack_name].command_list
+        if num not in num_pack:
+            print('Input Error!')
+            continue
+        while 1:
+            smart_print()
+            print(f'The selected package {num_pack[num]} | Commands:[{pack_objects[pack_name].count}]')
+            smart_print()
+            print('1. Start')
+            print('2. Show commands')
+            print('3. Cancel')
+            smart_print()
+            user_input = click.prompt(text='Enter the desired number and press ENTER: ', type=int)
+            smart_print()
+            if user_input not in (1, 2, 3):
+                print('Input Error!')
+            elif user_input == 1:
+                return pack_name
+            elif user_input == 2:
+                click.echo()
+                click.echo(f'{pack_name} commands: ')
+                for command in command_list:
+                    print(command)
+                continue
+            break
+
+
+def start(pack_obj, test=False):
     count = 0
-    errors = 0
-    for command in command_list:
+    errors = []
+    click.echo()
+    click.echo(f'Pack name: [{pack_obj.name}]')
+    smart_print()
+    for command in pack_obj.command_list:
         count += 1
-        print('\n')
-        print(f'{count}. [Execute]: {command}')
+        click.echo()
+        msg = f'[execute {count}]: {command}'
+        click.echo(msg)
         status = executor(command, test=test)
         if status:
-            print('Successfully!')
+            print('[Successfully]')
         else:
-            errors += 1
-            print('Error! Command not executed!')
+            errors.append(f'Error: {msg}')
+            print('[Error]')
+        smart_print()
     smart_print('', '=')
-    print(f'Completed. Successfully: [{len(command_list) - errors}] | Errors: [{errors}]\n')
+    click.echo(f'The command package [{pack_obj.name}] is executed.')
+    click.echo(f'Commands completed: [{count - len(errors)}] | Errors: [{len(errors)}]')
 
 
-def get_pack_name(pack_dict: dict) -> str:
+@click.command()
+@click.option('--file', '-f', help='The path to the file with the command packs')
+@click.option('--default', '-d', is_flag=True, help='Run an additional batch of commands from default')
+@click.option('--test', '-t', is_flag=True, help='Test run, commands will not be executed.')
+@click.option('--name', '-n', help='Name of the package to run automatically')
+def cli(file, default, name, test):
+    """Commandoro - CLI utility for automatic command execution
+
+    - To work, it uses files that store named command packages,
+        where the name is the name of the command package,
+        and the value is a list of commands.
+
+        You can create your own files with command packages using
+            the default structure.
+
+    - Use the default name for the package with the default commands.
+        You can perform them in addition to the selected command package.
+
+    - You can pass the file name as an argument,
+        or use the default file, it should be located
+        in the same directory as the file being run.
+
+    -The console version allows you to run a script in the terminal,
+        passing it a file with settings as an argument,
+        or use the default file. In the process, you select the desired
+        command package, then you can start execution,
+        display a list of commands for this package,
+        or return to the selection of the command package.
+
+    - After executing all the commands,
+        the program goes to the main menu and again waits for
+        input to select the desired package, or exit the program.
+
+    - You can pass the name of the desired package,
+        and if it exists inside the file with the command settings from it
+        will be executed.
+
+    - The examples run:
+
+    python commandoro.py --file=config.json -d
+
+    python commandoro.py --file=config.json -d --name=Ubuntu
+
     """
-    Displays command packages with the name of the package
-
-    and the number of commands in each package.
-    Accept input from the user, define and return the name of
-    the selected command package.
-
-    :param pack_dict: <dict> Correct dictionary with command packages
-        where the key is the name of the package,
-        the value is a list of commands.
-    :return: <str> Name of the selected command package
-    """
-    num_pack_dict = {n: name for n, name in enumerate(pack_dict.items(), 1)}
-    smart_print('Command packages', '=')
-    for n, val in num_pack_dict.items():
-        name = val[0]
-        command_list = val[1]
-        print(f'{n}: {name} | commands: [{len(command_list)}]')
-    smart_print()
-    while True:
-        user_input = get_input()
-        if user_input in num_pack_dict:
-            name = num_pack_dict[user_input][0]
-            return name
-        else:
-            print('Invalid input!!!')
-            continue
-
-
-def createParser() -> argparse.ArgumentParser:
-    """
-    Creating a command-line argument parser
-
-    :return: <argparse.ArgumentParser> argument parser
-    """
-    parser = argparse.ArgumentParser(
-        description='Utility for automatic command execution',
-        prog=f'Commandoro',
-        epilog="""The configuration file must be a file in the format
-        json and have the correct settings.""",
-    )
-    parser.add_argument('--v', '--version', action='version', help='Program version',
-                        version='%(prog)s v{}'.format(__version__))
-    parser.add_argument('path', nargs='?', help='Path to the settings file', default=False)
-    return parser
-
-
-def get_args(func):
-    """
-    Decorator for the main function
-
-    * create a parser
-    * get argument
-    * process the resulting path to the file with command packages
-    * if the path is not found, try to use the default file
-    * display information at the start and at the end
-
-    :param func: <function> Function for decoration
-    :return: <decorator>
-    """
-    parser = createParser()
-    namespace = parser.parse_args()
-    if not namespace.path:
+    start_logo()
+    if os.path.exists(str(file)):
+        file = file
+    else:
+        click.echo('The path is not found, we are looking for the default file...')
         filename = inspect.getframeinfo(inspect.currentframe()).filename
         folder = os.path.dirname(os.path.abspath(filename))
-        namespace.path = f'{folder}/commandoro/default_pack.json'
-        if not Path(namespace.path).exists():
-            namespace.path = f'{folder}/default_pack.json'
-
-    def deco():
-        smart_print('', '*')
-        smart_print(f' Commandoro {__version__} ', '=')
-        smart_print(' Aleksandr Suvorov | https://github.com/mysmarthub ', '-')
-        smart_print(' Utility for automatic command execution ', '=')
-        smart_print(' Donate: 4048 4150 0400 5852 ', '*')
-        func(namespace)
-        print()
-        smart_print(' Donate: 4048 4150 0400 5852 ', '-')
-        smart_print(' Copyright © 2020-2021 Aleksandr Suvorov ', '=')
-        smart_print('Program completed', '-')
-    return deco
-
-
-@get_args
-def main(namespace):
-    path = namespace.path
-    if path:
-        json_data: dict = open_json(path)
-        if json_data:
-            try:
-                while True:
-                    smart_print()
-                    print('Press Ctrl+C to exit...')
-                    pack_name = get_pack_name(json_data)
-                    while True:
-                        msg = f'Selected {pack_name} | Commands: [{len(json_data[pack_name])}] '
-                        if 'default' in json_data and pack_name != 'default':
-                            msg += f'+ default commands [{len(json_data["default"])}]'
-                        smart_print(msg, '=')
-                        action = get_action()
-                        if action == 1:
-                            command_list = json_data[pack_name]
-                            if 'default' in json_data and pack_name != 'default':
-                                command_list += json_data['default']
-                            execute_the_command(command_list, test=False)
-                            break
-                        elif action == 2:
-                            smart_print()
-                            print(f'Commands for {pack_name}:\n')
-                            for command in json_data[pack_name]:
-                                print(command)
-                            print()
-                            if 'default' in json_data and pack_name != 'default':
-                                print(f'Commands for default pack:\n')
-                                for command in json_data['default']:
-                                    print(command)
-                            smart_print()
-                            continue
-                        elif action == 3:
-                            break
-                        else:
-                            print('Invalid input!!!')
-                            continue
-            except KeyboardInterrupt:
-                print()
-                print('Exit...')
-            except TypeError:
-                print('Type Error in json file...')
+        file = os.path.join(folder, 'config.json')
+    if file:
+        pack_dict = open_file(file)
+        pack_objects = {key: Pack(name=key, command_list=val) for key, val in pack_dict.items()}
+        if pack_dict:
+            if name and name in pack_dict:
+                pack_name = name
+            else:
+                pack_name = get_pack_name(pack_objects)
+            pack_obj = Pack(pack_name, pack_dict[pack_name])
+            start(pack_obj, test=test)
+            if default and 'default' in pack_dict and pack_name != 'default':
+                pack_obj = Pack(name='default', command_list=pack_dict['default'])
+                start(pack_obj=pack_obj, test=test)
         else:
-            print('Error in the configuration file!!!')
+            click.echo('No data available...')
     else:
-        print('Error! The path does not exist!')
+        click.echo('Failed to load settings...')
+    end_logo()
 
 
 if __name__ == '__main__':
-    main()
+    cli()

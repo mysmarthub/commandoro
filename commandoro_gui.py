@@ -477,10 +477,10 @@ class MyWindow(QWidget):
         self.my_exec.reset()
 
     def get_default_file(self):
-        if os.path.exists('commandoro/default_pack.json'):
-            self.open_file('commandoro/default_pack.json')
-        elif os.path.exists('default_pack.json'):
-            self.open_file('default_pack.json')
+        if os.path.exists('commandoro/config.json'):
+            self.open_file('commandoro/config.json')
+        elif os.path.exists('config.json'):
+            self.open_file('config.json')
 
     def open_file(self, file_name):
         config_dict = open_json(file_name)

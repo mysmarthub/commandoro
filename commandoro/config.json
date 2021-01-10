@@ -19,7 +19,6 @@
     "sudo apt-get -y install vlc",
     "sudo apt-get -y install snap",
     "sudo apt-get -y install postgresql",
-    "sudo apt-get -y install cmatrix",
     "sudo apt-get -y install httpie",
     "sudo snap install docker",
     "pip3 install virtualenv --no-input",
@@ -110,6 +109,7 @@
     "pip install sfd --no-input",
     "pip install mpassgen --no-input",
     "pip install commandoro --no-input",
-    "pip install linuxautofix --no-input"
+    "pip install linuxautofix --no-input",
+    "sudo sysctl -p"
   ]
 }

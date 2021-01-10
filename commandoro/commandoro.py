@@ -28,7 +28,7 @@ import json
 import os
 import shutil
 
-__version__ = '0.0.7'
+__version__ = '0.0.7a'
 __author__ = 'Aleksandr Suvorov'
 __description__ = 'CLI utility for automatic command execution'
 __url__ = 'https://githib.com/mysmarthub'

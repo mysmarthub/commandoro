@@ -13,8 +13,8 @@ VERSION = __import__(PACKAGE).__version__
 AUTHOR = __import__(PACKAGE).__author__
 AUTHOR_EMAIL = "myhackband@yandex.ru"
 DESCRIPTION = "Commandoro - utility for automatic command execution." \
-              " Aleksandr Suvorov | https://github.com/mysmarthub/ | " \
-              "Donate: 4048 4150 0400 5852 | 4276 4417 5763 7686"
+              " Aleksandr Suvorov | https://github.com/mysmarthub | " \
+              "https://yoomoney.ru/to/4100115206129186"
 NAME = "commandoro"
 URL = "https://github.com/mysmarthub/commandoro"
 LICENSE = 'BSD 3-Clause License'

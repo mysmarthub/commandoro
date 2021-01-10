@@ -24,7 +24,12 @@ import shutil
 import json
 from pathlib import Path
 
-VERSION = '0.0.6'
+
+__version__ = '0.0.7'
+__author__ = 'Aleksandr Suvorov'
+__url__ = 'https://githib.com/mysmarthub'
+__donate__ = 'Donate: https://yoomoney.ru/to/4100115206129186'
+__copyright__ = 'Copyright © 2020-2021 Aleksandr Suvorov'
 
 
 def smart_print(text: str = '', char: str = '-'):
@@ -174,7 +179,7 @@ def createParser() -> argparse.ArgumentParser:
         json and have the correct settings.""",
     )
     parser.add_argument('--v', '--version', action='version', help='Program version',
-                        version='%(prog)s v{}'.format(VERSION))
+                        version='%(prog)s v{}'.format(__version__))
     parser.add_argument('path', nargs='?', help='Path to the settings file', default=False)
     return parser
 
@@ -203,7 +208,7 @@ def get_args(func):
 
     def deco():
         smart_print('', '*')
-        smart_print(f' Commandoro {VERSION} ', '=')
+        smart_print(f' Commandoro {__version__} ', '=')
         smart_print(' Aleksandr Suvorov | https://github.com/mysmarthub ', '-')
         smart_print(' Utility for automatic command execution ', '=')
         smart_print(' Donate: 4048 4150 0400 5852 ', '*')

@@ -64,16 +64,11 @@ It has the function of recording work in a log file.
 
 Help the project financially:
 ---
->Yandex Money:
-https://yoomoney.ru/to/4100115206129186
+>[Yandex Money](https://yoomoney.ru/to/4100115206129186)
 
     Visa:    4048 4150 0400 5852
 
-    Sberbank Russia: 4276 4417 5763 7686
-
-https://paypal.me/myhackband
-
----
+>[Paypal](https://paypal.me/myhackband)
 
 Description
 ---

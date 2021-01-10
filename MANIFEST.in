@@ -1,4 +1,3 @@
 include LICENSE
 include README.md
 include commandoro/default_pack.json
-include commandoro/commandoro.py

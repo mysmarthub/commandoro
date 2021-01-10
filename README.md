@@ -3,9 +3,12 @@ Commandoro
 
 >Console and graphical utility for automating command execution.
 
->Created: Aleksandr Suvorov
+>Author and developer: Aleksandr Suvorov
 
 ---
+[![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_logo.png)](https://github.com/mysmarthub/commandoro)
+[![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_gui_logo.png)](https://github.com/mysmarthub/commandoro)
+
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
 [![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)](http://pypi.org/project/commandoro)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/commandoro)](http://pypi.org/project/commandoro)
@@ -13,34 +16,71 @@ Commandoro
 [![GitHub all releases](https://img.shields.io/github/downloads/mysmarthub/commandoro/total)](https://github.com/mysmarthub/commandoro)
 [![GitHub](https://img.shields.io/github/license/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
 [![GitHub Repo stars](https://img.shields.io/github/stars/mysmarthub/commandoro?style=social)](https://github.com/mysmarthub/commandoro)
+![GitHub watchers](https://img.shields.io/github/watchers/mysmarthub/commandoro?style=social)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/mysmarthub/commandoro)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
+![GitHub repo size](https://img.shields.io/github/repo-size/mysmarthub/commandoro)
 
 ---
 [![Download Commandoro](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/commandoro/files/latest/download)
 [![Download Commandoro](https://img.shields.io/sourceforge/dt/commandoro.svg)](https://sourceforge.net/projects/commandoro/files/latest/download)
 ---
 
+Help the project financially:
+---
+>[Yandex Money](https://yoomoney.ru/to/4100115206129186)
+
+    Visa:    4048 4150 0400 5852
+
+>[Paypal](https://paypal.me/myhackband)
+
+
+Description:
+---
+
 The console version:
 ---
 ![Commandoro console version](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_logo.png)
 
->The console version allows you to run a script in the terminal, 
-passing it a file with settings as an argument, 
-or use the default file. In the process, you select the desired 
-command package, then you can start execution, 
-display a list of commands for this package, 
-or return to the selection of the command package. 
-After executing all the commands, 
-the program goes to the main menu and again waits for 
-input to select the desired package, or exit the program.
+>Commandoro - CLI utility for automatic command execution.
 > 
-> During execution, it displays information about the 
-command number, the command itself, and the status 
-of its execution. Upon completion, 
-it displays information about the number of executed commands, 
-and the number of errors during execution.
+> The idea is to store different sets(packages) of commands in a 
+> single file, and run them automatically at any time.
+> 
+> The program executes commands, the commands are stored in packages, 
+> and the packages are stored in a file.
+
+> The program uses a file in json format with the structure:
+```json
+{
+  "Commands pack name": [
+    "command one",
+    "command two"
+  ],
+  "Next commands pack name": [
+    "command one",
+    "command two"
+  ],
+  "default": [
+    "command one",
+    "command two"
+  ]
+}
+```
+> where keys are package names and values are lists of commands.
+
+> For convenience, you can create a package named "
+default" and store common commands in it, which are the same in some packages.
+>
+> Use the -d option when starting the utility 
+> to execute commands from the "default" package 
+> after executing the main package of your choice.
+> 
+>You can pass the file name as an argument when running -f [file path] 
+> or --file [file path], or use the default file, it should be
+in the same directory as the file being run and called "config.json".
+>
 
 ---
 The GUI version:
@@ -59,85 +99,61 @@ edit packages and commands without saving,
 add, remove, and modify the default package and commands from this package. 
 It has the function of recording work in a log file.
 
-
 ---
 
-Help the project financially:
----
->[Yandex Money](https://yoomoney.ru/to/4100115206129186)
+> You can also specify the name of the program using the -n or 
+> --name parameter, if you have a package with this name, 
+> the automatic execution of commands from this package will begin. 
+> This is necessary in order to, for example, 
+> create tasks in the scheduler and automatically run 
+> the utility with a batch of commands at the right time, 
+> without your participation.
 
-    Visa:    4048 4150 0400 5852
-
->[Paypal](https://paypal.me/myhackband)
-
-Description
----
-
->Attention! Some commands require you to run as an administrator.
+> Attention! Some commands require you to run as an administrator.
 > To run some commands in graphical mode, 
 > you need to install dependencies on the administrator name:
 
     sudo pip install -r commandoro/requirements.txt
 
->Console and graphical versions are available.
-
->With this utility, you can automate
-the execution of commands on a Linux system.
-Create a file with command packages or use and 
-edit the default file. In the settings file, create 
-new command packages, use the key as the package name, 
+> With this utility, you can easily automate
+manual execution, storage, and automatic execution of commands.
+> 
+> Create your own file with command packages or use and
+edit the default file. In the settings file, create
+new command packages, use the key as the package name
 and the value as the list of commands (see the default file).
+> 
+> With this utility, it is very convenient
+> to perform routine tasks, automatically execute the 
+> necessary commands, and configure the system after installation.
 
->In each item, collect the necessary commands,
-and start their automatic execution when necessary.
 
->With this utility, it is very convenient 
-to perform routine tasks, automatically execute the necessary commands, 
-and also configure the system after installation.
 
->The settings file is very simple and clear, 
+> The settings file is very simple and clear, 
 and all the commands you need for different 
 cases or different systems will be stored in one place.
 You will not need to keep them in memory, 
 in different files, enter them manually or search the Internet.
 
->In the settings file, there is a section from which commands 
-will be executed in any case. 
-This is done in order to bring common commands 
+> There is a "default" section in the settings file, from which commands
+will be executed in any case.
+This is done to combine common commands
 for all command packages into a single default package.
 
->You can create your own files with settings
-or edit the default settings file. 
-If you have created your own settings file, 
+> If you have created your own settings file, 
 just specify the full path to this file when 
-running the script as a parameter. 
-If you are using the graphical version of the program, 
+running the script as a parameter -f [config.json] or --file [config.json]. 
+> If you are using the graphical version of the program, 
 just open the file with the settings using the open button.
 The file must be in json format and have the required structure.
 
->The section with the "default" commands will run anyway.
-
-```json
-{
-  "Commands pack name": [
-    "command one",
-    "command two"
-  ],
-  "Next commands pack name": [
-    "command one",
-    "command two"
-  ],
-  "default": [
-    "command one",
-    "command two"
-  ]
-}
-```
-
->After starting, the program will prompt you to 
-select the desired item, and then execute all the 
-commands that are stored in the file with the 
-settings under this name/key.
+>After starting, the program will prompt you
+to select the desired item, and then execute all
+the commands that are stored in
+the settings file under this name/key.
+> 
+> Use -n [Command name] or --name [Command name] for automatic
+> > executing a batch of commands.
 
 ---
 
@@ -145,91 +161,105 @@ Help:
 ----
 
 ```
-usage: Commandoro [-h] [--v] [path]
+Usage: commandoro.py [OPTIONS]
 
-Utility for automatic command execution
+  Commandoro - CLI utility for automatic command execution
 
-positional arguments:
-  path            Path to the settings file
+  - To work, it uses files that store named command packages,     where the
+  name is the name of the command package,     and the value is a list of
+  commands.
 
-optional arguments:
-  -h, --help      show this help message and exit
-  --v, --version  Program version
+      You can create your own files with command packages using         the
+      default structure.
 
-The configuration file must be a file in the format .json and have the correct settings
+  - Use the default name for the package with the default commands.     You
+  can perform them in addition to the selected command package.
+
+  - You can pass the file name as an argument,     or use the default file,
+  it should be located     in the same directory as the file being run.
+
+  -The console version allows you to run a script in the terminal,
+  passing it a file with settings as an argument,     or use the default
+  file. In the process, you select the desired     command package, then you
+  can start execution,     display a list of commands for this package,
+  or return to the selection of the command package.
+
+  - After executing all the commands,     the program goes to the main menu
+  and again waits for     input to select the desired package, or exit the
+  program.
+
+  - You can pass the name of the desired package,     and if it exists
+  inside the file with the command settings from it     will be executed.
+
+  - The examples run:
+
+  python commandoro.py --file=config.json -d
+
+  python commandoro.py --file=config.json -d --name=Ubuntu
+
+Options:
+  -f, --file TEXT  The path to the file with the command packs
+  -d, --default    Run an additional batch of commands from default
+  -t, --test       Test run, commands will not be executed.
+  -n, --name TEXT  Name of the package to run automatically
+  --help           Show this message and exit.
+
 ```
 
 ---
 
 Installation and launch:
 ---
-    You can install the utility using pip, pipenv:
+    You can install the utility using pip:
 
 `pip install commandoro`
 
-`pipenv install commandoro`
 
 `sudo pip install commandoro`
-
-`sudo pipenv install commandoro`
 
     And then run it like this:
 
 `commandoro`
 
-`commandoro /path to the settings file/config.json`
+`commandoro --file config.json -d`
+
+`commandoro --file=config.json --name=Ubuntu -d`
 
 >On some systems, some commands require administrator rights, 
 > so you can install the utility and run it further using:
 
 `sudo pip install commandoro`
 
-`sudo pipenv install commandoro`
-
-`sudo commandoro`
-
-`sudo commandoro /path to the settings file/config.json`
+`sudo commandoro --file=config.json --name=Ubuntu -d`
 
 >You can download the source files and run using Python:
 
-```
-    git clone https://github.com/mysmarthub/commandoro.git
+`git clone https://github.com/mysmarthub/commandoro.git`
+
+`cd commandoro`
+
+`pip install -r requirements`
     
-    python commandoro/commandoro/commandoro.py
+`python commandoro/commandoro.py --file=commandoro/config.json`
      
-     or
+or
+
+`sudo pip install -r requirements`
     
-    sudo python commandoro/commandoro/commandoro.py
+`sudo python commandoro/commandoro/commandoro.py`
     
     Commandoro Gui:
     ---------------
     
     pip install -r commandoro/requirements.txt 
-    python commandoro/commandoro_gui.py
+    python commandoro_gui.py
     
     Sudo Commandoro Gui:
     --------------------
     
-    sudo pip install -r commandoro/requirements.txt 
-    sudo python commandoro/commandoro_gui.py
+    sudo pip install -r requirements.txt 
+    sudo python commandoro_gui.py
 
-```
-
->When creating your own files, use
-the structure from the default file.
-
-```json
-{
-  "Commands pack name": [
-    "command one",
-    "command two"
-  ],
-  "Next commands pack name": [
-    "command one",
-    "command two"
-  ]
-}
-```
 ---
 
 Links:

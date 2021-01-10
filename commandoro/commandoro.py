@@ -28,6 +28,7 @@ import json
 import os
 import shutil
 
+__title__ = 'Commandoro'
 __version__ = '0.0.7'
 __author__ = 'Aleksandr Suvorov'
 __description__ = 'CLI utility for automatic command execution'
@@ -91,7 +92,7 @@ def smart_print(text='', char='-'):
 
 def start_logo():
     smart_print('', '*')
-    smart_print(f'Commandoro {__version__} | Author: {__author__}', '=')
+    smart_print(f'{__title__} {__version__} | Author: {__author__}', '=')
     smart_print(f'{__description__}', ' ')
     smart_print()
 
@@ -120,7 +121,8 @@ def get_pack_name(pack_objects: dict):
             continue
         while 1:
             smart_print()
-            print(f'The selected package {num_pack[num]} | Commands:[{pack_objects[pack_name].count}]')
+            print(f'The selected package {num_pack[num]} | '
+                  f'Commands:[{pack_objects[pack_name].count}]')
             smart_print()
             print('1. Start')
             print('2. Show commands')
@@ -164,11 +166,21 @@ def start(pack_obj, test=False):
     click.echo(f'Commands completed: [{count - len(errors)}] | Errors: [{len(errors)}]')
 
 
+def print_version(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+    click.echo(f'{__title__} {__version__} - {__copyright__}')
+    ctx.exit()
+
+
 @click.command()
 @click.option('--file', '-f', help='The path to the file with the command packs')
 @click.option('--default', '-d', is_flag=True, help='Run an additional batch of commands from default')
 @click.option('--test', '-t', is_flag=True, help='Test run, commands will not be executed.')
 @click.option('--name', '-n', help='Name of the package to run automatically')
+@click.option('--version', '-v', is_flag=True, callback=print_version,
+              help='Displays the version of the program and exits.',
+              expose_value=False, is_eager=True)
 def cli(file, default, name, test):
     """Commandoro - CLI utility for automatic command execution
 

@@ -1,7 +1,7 @@
 Commandoro
 ===
 
->Console and graphical utility for automating command execution.
+>Console and graphical utility for automating command execution
 
 >Author and developer: Aleksandr Suvorov
 
@@ -281,7 +281,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Support:
----
-    Email: myhackband@yandex.ru
-    Copyright © 2020 Aleksandr Suvorov
+    -----------------------------------------------------------------------------
+    Licensed under the terms of the BSD 3-Clause License
+    (see LICENSE for details)
+    https://github.com/mysmarthub
+    Copyright © 2020-2021 Aleksandr Suvorov
+    -----------------------------------------------------------------------------
+
+> Uses [Click](https://github.com/pallets/click) by [license](https://github.com/pallets/click/blob/master/LICENSE.rst)

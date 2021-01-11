@@ -29,11 +29,33 @@ Commandoro
 
 Help the project financially:
 ---
->[Yandex Money](https://yoomoney.ru/to/4100115206129186)
+> If you like my projects, you can support me financially - 
+> " for an apartment in Moscow or a hut in the taiga) ..."
+> 
+> [Paypal](https://paypal.me/myhackband)
+> 
+> [Yandex money](https://yoomoney.ru/to/4100115206129186)
+> 
+> Visa: 4048-4150-0400-5852
 
-    Visa:    4048 4150 0400 5852
 
->[Paypal](https://paypal.me/myhackband)
+
+>If you can't find a way to donate, write to me:
+> mailto: mysmarthub@ya.ru
+
+---
+
+
+Termux support:
+---
+You can easily use the utility with Termux on mobile phones and tablets.
+
+1. Download and install Termux https://play.google.com/store/apps/details?id=com.termux&hl=ru&gl=US
+2. `pkg install python`
+3. `pip install linuxautofix`
+4. `linuxautofix --help`
+
+---
 
 
 Description:
@@ -280,6 +302,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
 
     -----------------------------------------------------------------------------
     Licensed under the terms of the BSD 3-Clause License

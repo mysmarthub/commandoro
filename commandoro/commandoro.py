@@ -10,17 +10,6 @@ Console utility for automatic command execution
 
 Store commands for different tasks or systems in one
 place and execute them automatically.
-
-The console version allows you to run a script in the terminal,
-passing it a file with settings as an argument,
-or use the default file. In the process, you select the desired
-command package, then you can start execution,
-display a list of commands for this package,
-or return to the selection of the command package.
-
-After executing all the commands,
-the program goes to the main menu and again waits for
-input to select the desired package, or exit the program.
 """
 import click
 import inspect
@@ -184,40 +173,38 @@ def print_version(ctx, param, value):
 def cli(file, default, name, test):
     """Commandoro - CLI utility for automatic command execution
 
-    - To work, it uses files that store named command packages,
+    - To work, the utility uses files that store named command packages,
         where the name is the name of the command package,
         and the value is a list of commands.
 
-        You can create your own files with command packages using
-            the default structure.
+    - You can create your own files with command packages using
+        default structure.
 
-    - Use the default name for the package with the default commands.
-        You can perform them in addition to the selected command package.
+    - Use the name "default" for the package with the default commands.
+        You can run them in addition to the selected batch of commands.
 
-    - You can pass the file name as an argument,
+    - You can pass the file name as an argument
         or use the default file, it should be located
         in the same directory as the file being run.
 
-    -The console version allows you to run a script in the terminal,
-        passing it a file with settings as an argument,
-        or use the default file. In the process, you select the desired
-        command package, then you can start execution,
-        display a list of commands for this package,
-        or return to the selection of the command package.
+    - The console version allows you to run the script in the terminal,
+        passing it a file with the settings as an argument,
+        or use the default file. In the process of working,
+        you choose the right one command package,
+        after which you can start executing, display a list
+        of commands for this package,
+        or go back to selecting the command package.
 
-    - After executing all the commands,
-        the program goes to the main menu and again waits for
-        input to select the desired package, or exit the program.
+    - Using the -n or --name parameter, you can specify the name
+        of the command package at startup,
+        then the utility will immediately start automatic execution
+        of commands from this package.
 
-    - You can pass the name of the desired package,
-        and if it exists inside the file with the command settings from it
-        will be executed.
-
-    - The examples run:
+    - Examples of implementation:
 
     python commandoro.py --file=config.json -d
 
-    python commandoro.py --file=config.json -d --name=Ubuntu
+    python commandoro.py --file=config.json-d --name=Ubuntu
 
     """
     start_logo()

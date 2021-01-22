@@ -14,7 +14,9 @@ Help the project financially:
 
 https://paypal.me/myhackband
 
-Yandex money](https://yoomoney.ru/to/4100115206129186
+Yandex money:
+
+https://yoomoney.ru/to/4100115206129186
 
     Visa: 4048-4150-0400-5852
 

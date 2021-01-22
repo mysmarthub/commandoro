@@ -11,15 +11,13 @@ from os.path import join, dirname
 PACKAGE = "commandoro"
 VERSION = __import__(PACKAGE).__version__
 AUTHOR = __import__(PACKAGE).__author__
-AUTHOR_EMAIL = "myhackband@yandex.ru"
-DESCRIPTION = "Commandoro - utility for automatic command execution." \
-              " Aleksandr Suvorov | https://github.com/mysmarthub | " \
-              "https://yoomoney.ru/to/4100115206129186"
+AUTHOR_EMAIL = __import__(PACKAGE).__email__
+DESCRIPTION = __import__(PACKAGE).__description__
 NAME = "commandoro"
-URL = "https://github.com/mysmarthub/commandoro"
-LICENSE = 'BSD 3-Clause License'
+URL = __import__(PACKAGE).__url__
+LICENSE = __import__(PACKAGE).__license__
 LONG_DESCRIPTION = open(join(dirname(__file__), 'README.md')).read()
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = open(join(dirname(__file__), 'requirements.txt')).read()
 PLATFORM = ['Linux', 'Windows']
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
@@ -39,6 +37,9 @@ CLASSIFIERS = [
 KEYWORDS = [
     'commandoro',
     'automatic command execution',
+    'linux auto fix',
+    'aleksandr suvorov',
+    'mysmarthub',
 ]
 setup(
     name=NAME,

@@ -5,25 +5,22 @@
 # (see LICENSE for details)
 # Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
-"""
-Console utility for automatic command execution
-
-Store commands for different tasks or systems in one
-place and execute them automatically.
-"""
-import click
+"""Cli utility for automatic command execution"""
 import inspect
 import json
 import os
 import shutil
 
-__title__ = 'Commandoro'
-__version__ = '0.0.7'
-__author__ = 'Aleksandr Suvorov'
-__description__ = 'CLI utility for automatic command execution'
-__url__ = 'https://github.com/mysmarthub'
-__donate__ = 'Donate: https://yoomoney.ru/to/4100115206129186'
-__copyright__ = 'Copyright © 2020-2021 Aleksandr Suvorov'
+import click
+
+TITLE = 'Commandoro'
+VERSION = '0.0.8'
+AUTHOR = 'Aleksandr Suvorov'
+DESCRIPTION = 'Cli utility for automatic command execution'
+URL = 'https://github.com/mysmarthub/commandoro/'
+YANDEX = 'https://yoomoney.ru/to/4100115206129186'
+PAYPAL = 'https://paypal.me/myhackband'
+COPYRIGHT = 'Copyright © 2020-2021 Aleksandr Suvorov'
 
 
 class Pack:
@@ -74,23 +71,24 @@ def smart_print(text='', char='-'):
         char = ' '
     columns, _ = shutil.get_terminal_size()
     if text:
-        print(f' {text} '.center(columns, char))
+        click.echo(f' {text} '.center(columns, char))
     else:
-        print(f''.center(columns, char))
+        click.echo(f''.center(columns, char))
 
 
 def start_logo():
     smart_print('', '*')
-    smart_print(f'{__title__} {__version__} | Author: {__author__}', '=')
-    smart_print(f'{__description__}', ' ')
+    smart_print(f'{TITLE} v{VERSION} | Author: {AUTHOR}', '=')
+    smart_print(f'{DESCRIPTION}', ' ')
     smart_print()
 
 
 def end_logo():
+    smart_print(f'{URL}', '-')
+    smart_print(f'{YANDEX}', '-')
+    smart_print(f'{PAYPAL}', '-')
+    smart_print(f'{COPYRIGHT}', '=')
     smart_print('Program completed', '-')
-    smart_print(f'{__donate__}', '-')
-    smart_print(f'https://www.paypal.com/paypalme/myhackband', '-')
-    smart_print(f'{__copyright__}', '=')
 
 
 def get_pack_name(pack_objects: dict):
@@ -99,35 +97,35 @@ def get_pack_name(pack_objects: dict):
         """Shows a simple menu."""
         smart_print('Command packages:')
         for n, name in num_pack.items():
-            print(f'{n}. {name} | Commands[{pack_objects[name].count}]')
+            click.echo(f'{n}. {name} | Commands[{pack_objects[name].count}]')
         smart_print()
-        num = click.prompt(text='Enter the package number and click Enter '
-                                '(ctrl+c to exit): ', type=int)
+        num = click.prompt(text='Enter the package number and click Enter (ctrl+c for exit)', type=int)
+        if num not in num_pack:
+            smart_print()
+            click.echo('Input Error!')
+            continue
         pack_name = num_pack[num]
         command_list = pack_objects[pack_name].command_list
-        if num not in num_pack:
-            print('Input Error!')
-            continue
         while 1:
             smart_print()
-            print(f'The selected package {num_pack[num]} | '
-                  f'Commands:[{pack_objects[pack_name].count}]')
+            click.echo(f'The selected package {num_pack[num]} | '
+                       f'Commands:[{pack_objects[pack_name].count}]')
             smart_print()
-            print('1. Start')
-            print('2. Show commands')
-            print('3. Cancel')
+            click.echo('1. Start')
+            click.echo('2. Show commands')
+            click.echo('3. Cancel')
             smart_print()
-            user_input = click.prompt(text='Enter the desired number and press ENTER: ', type=int)
+            user_input = click.prompt(text='Enter the desired number and press ENTER', type=int)
             smart_print()
             if user_input not in (1, 2, 3):
-                print('Input Error!')
+                click.echo('Input Error!')
             elif user_input == 1:
                 return pack_name
             elif user_input == 2:
                 click.echo()
                 click.echo(f'{pack_name} commands: ')
                 for command in command_list:
-                    print(command)
+                    click.echo(command)
                 continue
             break
 
@@ -145,10 +143,10 @@ def start(pack_obj, test=False):
         click.echo(msg)
         status = executor(command, test=test)
         if status:
-            print('[Successfully]')
+            click.echo('[Successfully]')
         else:
             errors.append(f'Error: {msg}')
-            print('[Error]')
+            click.echo('[Error]')
         smart_print()
     smart_print('', '=')
     click.echo(f'The command package [{pack_obj.name}] is executed.')
@@ -158,12 +156,12 @@ def start(pack_obj, test=False):
 def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
-    click.echo(f'{__title__} {__version__} - {__copyright__}')
+    click.echo(f'{TITLE} {VERSION} - {COPYRIGHT}')
     ctx.exit()
 
 
 @click.command()
-@click.option('--file', '-f', help='The path to the file with the command packs')
+@click.option('--file', '-f', help='The path to the file with the command packs', type=click.Path(exists=True))
 @click.option('--default', '-d', is_flag=True, help='Run an additional batch of commands from default')
 @click.option('--test', '-t', is_flag=True, help='Test run, commands will not be executed.')
 @click.option('--name', '-n', help='Name of the package to run automatically')
@@ -172,6 +170,8 @@ def print_version(ctx, param, value):
               expose_value=False, is_eager=True)
 def cli(file, default, name, test):
     """Commandoro - CLI utility for automatic command execution
+
+    and auto-tuning Linux distributions after installation.
 
     - To work, the utility uses files that store named command packages,
         where the name is the name of the command package,
@@ -206,9 +206,15 @@ def cli(file, default, name, test):
 
     python commandoro.py --file=config.json-d --name=Ubuntu
 
+    or
+
+    commandoro --file=config.json -d
+
+    commandoro --file=config.json-d --name=Ubuntu
+
     """
     start_logo()
-    if os.path.exists(str(file)):
+    if os.path.exists(str(file)) and os.path.isfile(file):
         file = file
     else:
         click.echo('The path is not found, we are looking for the default file...')
@@ -222,6 +228,8 @@ def cli(file, default, name, test):
             if name and name in pack_dict:
                 pack_name = name
             else:
+                if name:
+                    click.echo('Name not found...')
                 pack_name = get_pack_name(pack_objects)
             pack_obj = Pack(pack_name, pack_dict[pack_name])
             start(pack_obj, test=test)
@@ -229,9 +237,9 @@ def cli(file, default, name, test):
                 pack_obj = Pack(name='default', command_list=pack_dict['default'])
                 start(pack_obj=pack_obj, test=test)
         else:
-            click.echo('No data available...')
+            click.echo('No data available... There may be an error in the configuration file')
     else:
-        click.echo('Failed to load settings...')
+        click.echo('Failed to load settings... There may be an error in the configuration file')
     end_logo()
 
 

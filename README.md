@@ -6,11 +6,8 @@ Commandoro
 >Author and developer: Aleksandr Suvorov
 
 ---
-[![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_logo.png)](https://github.com/mysmarthub/commandoro)
-[![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_gui_logo.png)](https://github.com/mysmarthub/commandoro)
 
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
-[![PyPI - Implementation](https://img.shields.io/pypi/implementation/commandoro)](http://pypi.org/project/commandoro)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/commandoro)](http://pypi.org/project/commandoro)
 [![PyPI - Wheel](https://img.shields.io/pypi/wheel/commandoro)](http://pypi.org/project/commandoro)
 [![GitHub all releases](https://img.shields.io/github/downloads/mysmarthub/commandoro/total)](https://github.com/mysmarthub/commandoro)
@@ -18,7 +15,6 @@ Commandoro
 [![GitHub Repo stars](https://img.shields.io/github/stars/mysmarthub/commandoro?style=social)](https://github.com/mysmarthub/commandoro)
 ![GitHub watchers](https://img.shields.io/github/watchers/mysmarthub/commandoro?style=social)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
-![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/mysmarthub/commandoro)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mysmarthub/commandoro)
 
@@ -26,6 +22,12 @@ Commandoro
 [![Download Commandoro](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/commandoro/files/latest/download)
 [![Download Commandoro](https://img.shields.io/sourceforge/dt/commandoro.svg)](https://sourceforge.net/projects/commandoro/files/latest/download)
 ---
+
+[![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_logo.png)](https://github.com/mysmarthub/commandoro)
+[![Commandoro](https://github.com/mysmarthub/commandoro/raw/master/images/commandoro_gui_logo.png)](https://github.com/mysmarthub/commandoro)
+
+---
+
 
 Help the project financially:
 ---
@@ -50,7 +52,7 @@ Termux support:
 ---
 You can easily use the utility with Termux on mobile phones and tablets.
 
-1. Download and install Termux https://play.google.com/store/apps/details?id=com.termux&hl=ru&gl=US
+1. Install Termux
 2. `pkg install python`
 3. `pip install commandoro`
 4. `commandoro --help`

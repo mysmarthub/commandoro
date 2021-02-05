@@ -343,7 +343,7 @@ class MyWindow(QWidget):
 
     def save_file(self, file):
         with open(file, 'w') as f:
-            json.dump(self.options_dict, f)
+            json.dump(self.options_dict, f, indent=4)
             f.flush()
         self.show_msg(msg=f'File {file} successfully saved!')
         self.options_file = file

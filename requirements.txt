@@ -1,3 +1,2 @@
-click==7.1.2
-PySide2==5.15.2
-shiboken2==5.15.2
+click
+PySide2

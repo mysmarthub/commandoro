@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # Licensed under the terms of the BSD 3-Clause License
-# (see LICENSE for details)
+# (see LICENSE.txt for details)
+# https://github.com/mysmarthub/commandoro/
 # Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
 """Graphical utility for automating the execution of command packages,
@@ -477,8 +478,8 @@ class MyWindow(QWidget):
         self.my_exec.reset()
 
     def get_default_file(self):
-        if os.path.exists('commandoro/config.json'):
-            self.open_file('commandoro/config.json')
+        if os.path.exists('config.json'):
+            self.open_file('config.json')
         elif os.path.exists('config.json'):
             self.open_file('config.json')
 

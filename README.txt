@@ -196,14 +196,13 @@ Usage: commandoro.py [OPTIONS]
 
     - The examples run:
 
-    python commandoro.py --file=config.json -d
+    python commandoro.py --file config.json -d
 
-    python commandoro.py --file=config.json -d --name=Ubuntu
+    python commandoro.py --file config.json -d --name Ubuntu
 
   Options:
     -f, --file TEXT  The path to the file with the command packs
     -d, --default    Run an additional batch of commands from default
-    -t, --test       Test run, commands will not be executed.
     -n, --name TEXT  Name of the package to run automatically
     --help           Show this message and exit.
 

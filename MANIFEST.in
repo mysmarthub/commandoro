@@ -1,5 +1,4 @@
-include LICENSE
+include LICENSE.txt
 include README.md
 include README.txt
-include commandoro/config.json
 include requirements.txt

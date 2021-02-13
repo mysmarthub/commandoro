@@ -2,123 +2,66 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # Licensed under the terms of the BSD 3-Clause License
-# (see LICENSE for details)
+# (see LICENSE.txt for details)
+# https://github.com/mysmarthub/commandoro/
 # Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
 """Cli utility for automatic command execution"""
-import inspect
-import json
-import os
-import shutil
 
 import click
 
-TITLE = 'Commandoro'
-VERSION = '0.0.8'
-AUTHOR = 'Aleksandr Suvorov'
-DESCRIPTION = 'Cli utility for automatic command execution'
-URL = 'https://github.com/mysmarthub/commandoro/'
-YANDEX = 'https://yoomoney.ru/to/4100115206129186'
-PAYPAL = 'https://paypal.me/myhackband'
-COPYRIGHT = 'Copyright © 2020-2021 Aleksandr Suvorov'
-
-
-class Pack:
-    def __init__(self, name, command_list):
-        self.name = name
-        self.command_list = command_list
-
-    @property
-    def count(self):
-        return len(self.command_list)
-
-
-def executor(command: str, test: bool = False) -> bool:
-    """
-    Executes the command
-
-    :param command: <str> Command to execute
-    :param test: <bool> Used for testing. True disables the actual execution of commands.
-    :return: <bool> Logical status of command execution
-    """
-    if not test:
-        if type(command) is str:
-            status = os.system(command)
-            if status:
-                return False
-    return True
-
-
-def open_file(file):
-    """
-    Open the settings file in json format.
-
-    :param file: <str> Path to the file in json format with command packages
-    :return: <dict> Dictionary with command packages, where the key is the name of the package,
-    and the value is a list of commands. If an error occurs, it returns an empty dictionary.
-    """
-    try:
-        with open(file, 'r') as f:
-            json_data = json.load(f)
-    except (json.decoder.JSONDecodeError, FileNotFoundError):
-        return {}
-    else:
-        return json_data
-
-
-def smart_print(text='', char='-'):
-    if not char:
-        char = ' '
-    columns, _ = shutil.get_terminal_size()
-    if text:
-        click.echo(f' {text} '.center(columns, char))
-    else:
-        click.echo(f''.center(columns, char))
+try:
+    from commandoro import settings, commander
+except ImportError:
+    import settings
+    import commander
 
 
 def start_logo():
-    smart_print('', '*')
-    smart_print(f'{TITLE} v{VERSION} | Author: {AUTHOR}', '=')
-    smart_print(f'{DESCRIPTION}', ' ')
-    smart_print()
+    commander.smart_print('', '*')
+    commander.smart_print(f'{settings.TITLE} v{settings.VERSION}', '=')
+    commander.smart_print(f'{settings.DESCRIPTION}', '-')
+    commander.smart_print()
 
 
 def end_logo():
-    smart_print(f'{URL}', '-')
-    smart_print(f'{YANDEX}', '-')
-    smart_print(f'{PAYPAL}', '-')
-    smart_print(f'{COPYRIGHT}', '=')
-    smart_print('Program completed', '-')
+    commander.smart_print(f'{settings.YANDEX}', '-')
+    commander.smart_print(f'{settings.COPYRIGHT}', '=')
+    commander.smart_print('', '*')
 
 
-def get_pack_name(pack_objects: dict):
+def get_pack_name(file, pack_objects: dict):
     num_pack = {n: name for n, name in enumerate(pack_objects.keys(), 1)}
     while 1:
         """Shows a simple menu."""
-        smart_print('Command packages:')
+        commander.smart_print('File information')
+        click.echo(f'File: [{file}]')
+        commander.smart_print('Command packages:')
         for n, name in num_pack.items():
             click.echo(f'{n}. {name} | Commands[{pack_objects[name].count}]')
-        smart_print()
+        commander.smart_print()
         num = click.prompt(text='Enter the package number and click Enter (ctrl+c for exit)', type=int)
         if num not in num_pack:
-            smart_print()
+            commander.smart_print()
             click.echo('Input Error!')
+            input('Enter for continue ...')
             continue
         pack_name = num_pack[num]
         command_list = pack_objects[pack_name].command_list
         while 1:
-            smart_print()
+            commander.smart_print()
             click.echo(f'The selected package {num_pack[num]} | '
                        f'Commands:[{pack_objects[pack_name].count}]')
-            smart_print()
+            commander.smart_print()
             click.echo('1. Start')
             click.echo('2. Show commands')
             click.echo('3. Cancel')
-            smart_print()
+            commander.smart_print()
             user_input = click.prompt(text='Enter the desired number and press ENTER', type=int)
-            smart_print()
+            commander.smart_print()
             if user_input not in (1, 2, 3):
                 click.echo('Input Error!')
+                input('Enter for continue ...')
             elif user_input == 1:
                 return pack_name
             elif user_input == 2:
@@ -130,25 +73,25 @@ def get_pack_name(pack_objects: dict):
             break
 
 
-def start(pack_obj, test=False):
+def start(pack_obj):
     count = 0
     errors = []
     click.echo()
     click.echo(f'Pack name: [{pack_obj.name}]')
-    smart_print()
+    commander.smart_print()
     for command in pack_obj.command_list:
         count += 1
         click.echo()
         msg = f'[execute {count}]: {command}'
         click.echo(msg)
-        status = executor(command, test=test)
+        status = commander.executor(command)
         if status:
             click.echo('[Successfully]')
         else:
             errors.append(f'Error: {msg}')
             click.echo('[Error]')
-        smart_print()
-    smart_print('', '=')
+        commander.smart_print()
+    commander.smart_print('', '=')
     click.echo(f'The command package [{pack_obj.name}] is executed.')
     click.echo(f'Commands completed: [{count - len(errors)}] | Errors: [{len(errors)}]')
 
@@ -156,19 +99,19 @@ def start(pack_obj, test=False):
 def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
-    click.echo(f'{TITLE} {VERSION} - {COPYRIGHT}')
+    click.echo(f'{settings.TITLE} {settings.VERSION} - {settings.COPYRIGHT}')
     ctx.exit()
 
 
 @click.command()
-@click.option('--file', '-f', help='The path to the file with the command packs', type=click.Path(exists=True))
+@click.option('--file', '-f', help='The path to the file with the command packs',
+              type=click.Path(exists=True, dir_okay=False))
 @click.option('--default', '-d', is_flag=True, help='Run an additional batch of commands from default')
-@click.option('--test', '-t', is_flag=True, help='Test run, commands will not be executed.')
 @click.option('--name', '-n', help='Name of the package to run automatically')
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
               expose_value=False, is_eager=True)
-def cli(file, default, name, test):
+def cli(file, default, name):
     """Commandoro - CLI utility for automatic command execution
 
     and auto-tuning Linux distributions after installation.
@@ -202,44 +145,64 @@ def cli(file, default, name, test):
 
     - Examples of implementation:
 
-    python commandoro.py --file=config.json -d
+    python commandoro.py --file config.json -d
 
-    python commandoro.py --file=config.json-d --name=Ubuntu
+    python commandoro.py --file config.json -d --name Ubuntu
 
     or
 
-    commandoro --file=config.json -d
+    commandoro --file config.json -d
 
-    commandoro --file=config.json-d --name=Ubuntu
+    commandoro --file config.json -d --name Ubuntu
 
     """
     start_logo()
-    if os.path.exists(str(file)) and os.path.isfile(file):
-        file = file
-    else:
-        click.echo('The path is not found, we are looking for the default file...')
-        filename = inspect.getframeinfo(inspect.currentframe()).filename
-        folder = os.path.dirname(os.path.abspath(filename))
-        file = os.path.join(folder, 'config.json')
-    if file:
-        pack_dict = open_file(file)
-        pack_objects = {key: Pack(name=key, command_list=val) for key, val in pack_dict.items()}
-        if pack_dict:
-            if name and name in pack_dict:
-                pack_name = name
+
+    while 1:
+        if not file:
+            click.echo('The file is not found...')
+            commander.smart_print()
+            click.echo('1. Open')
+            click.echo('2. Create')
+            click.echo('3. Edit')
+            click.echo('0. Exit')
+            commander.smart_print()
+            prompt = click.prompt('Enter', type=int)
+            commander.smart_print()
+            if not prompt:
+                break
+            elif prompt == 1:
+                file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+            elif prompt == 2:
+                while 1:
+                    name = click.prompt('File name')
+                    if len(name) < 4:
+                        click.echo('Error! Name is too short!')
+                        continue
+                    break
+                file = commander.create_file(name)
+                click.edit(filename=file)
+            elif prompt == 3:
+                if not file:
+                    file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+                click.edit(filename=file)
+                continue
+        if file:
+            pack_dict = commander.open_json_file(file)
+            pack_objects = {key: commander.Pack(name=key, command_list=val) for key, val in pack_dict.items()}
+            if pack_dict:
+                if name and name in pack_dict:
+                    pack_name = name
+                else:
+                    pack_name = get_pack_name(file=file, pack_objects=pack_objects)
+                pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
+                start(pack_obj)
+                if default and 'default' in pack_dict and pack_name != 'default':
+                    pack_obj = commander.Pack(name='default', command_list=pack_dict['default'])
+                start(pack_obj=pack_obj)
+                break
             else:
-                if name:
-                    click.echo('Name not found...')
-                pack_name = get_pack_name(pack_objects)
-            pack_obj = Pack(pack_name, pack_dict[pack_name])
-            start(pack_obj, test=test)
-            if default and 'default' in pack_dict and pack_name != 'default':
-                pack_obj = Pack(name='default', command_list=pack_dict['default'])
-                start(pack_obj=pack_obj, test=test)
-        else:
-            click.echo('No data available... There may be an error in the configuration file')
-    else:
-        click.echo('Failed to load settings... There may be an error in the configuration file')
+                click.echo('No data available... There may be an error in the configuration file')
     end_logo()
 
 

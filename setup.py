@@ -1,46 +1,28 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # Licensed under the terms of the BSD 3-Clause License
-# (see LICENSE for details)
+# (see LICENSE.txt for details)
+# https://github.com/mysmarthub/commandoro/
 # Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
 from setuptools import setup, find_packages
 from os.path import join, dirname
 
-PACKAGE = "commandoro"
-VERSION = __import__(PACKAGE).__version__
-AUTHOR = __import__(PACKAGE).__author__
-AUTHOR_EMAIL = __import__(PACKAGE).__email__
-DESCRIPTION = __import__(PACKAGE).__description__
-NAME = "commandoro"
-URL = __import__(PACKAGE).__url__
-LICENSE = __import__(PACKAGE).__license__
+from commandoro import settings
+
+PACKAGE = settings.PACKAGE
+VERSION = settings.VERSION
+AUTHOR = settings.AUTHOR
+AUTHOR_EMAIL = settings.EMAIL
+DESCRIPTION = settings.DESCRIPTION
+NAME = settings.NAME
+URL = settings.URL
+LICENSE = settings.LICENSE
 LONG_DESCRIPTION = open(join(dirname(__file__), 'README.md')).read()
-INSTALL_REQUIRES = open(join(dirname(__file__), 'requirements.txt')).read()
-PLATFORM = ['Linux', 'Windows']
-CLASSIFIERS = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Console",
-    "Intended Audience :: End Users/Desktop",
-    "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: BSD License",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3 :: Only",
-    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Utilities"
-]
-KEYWORDS = [
-    'commandoro',
-    'automatic command execution',
-    'linux auto fix',
-    'aleksandr suvorov',
-    'mysmarthub',
-]
+INSTALL_REQUIRES = settings.REQUIREMENTS
+PLATFORM = settings.PLATFORM
+CLASSIFIERS = settings.CLASSIFIERS
+KEYWORDS = settings.KEYWORDS
 setup(
     name=NAME,
     author=AUTHOR,

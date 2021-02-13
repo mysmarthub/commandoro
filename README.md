@@ -46,6 +46,10 @@ Help the project financially:
 > mailto: mysmarthub@ya.ru
 
 ---
+What's news?
+---
+Added the ability to create, open,
+edit files with command packages.
 
 
 Termux support:

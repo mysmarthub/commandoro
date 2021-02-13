@@ -40,7 +40,7 @@ def get_pack_name(file, pack_objects: dict):
         for n, name in num_pack.items():
             click.echo(f'{n}. {name} | Commands[{pack_objects[name].count}]')
         commander.smart_print()
-        num = click.prompt(text='Enter the package number and click Enter (ctrl+c for exit)', type=int)
+        num = click.prompt(text='Enter the package (ctrl+c for exit)', type=int)
         if num not in num_pack:
             commander.smart_print()
             click.echo('Input Error!')
@@ -57,7 +57,7 @@ def get_pack_name(file, pack_objects: dict):
             click.echo('2. Show commands')
             click.echo('3. Cancel')
             commander.smart_print()
-            user_input = click.prompt(text='Enter the desired number and press ENTER', type=int)
+            user_input = click.prompt(text='Enter the desired number', type=int)
             commander.smart_print()
             if user_input not in (1, 2, 3):
                 click.echo('Input Error!')
@@ -67,8 +67,8 @@ def get_pack_name(file, pack_objects: dict):
             elif user_input == 2:
                 click.echo()
                 click.echo(f'{pack_name} commands: ')
-                for command in command_list:
-                    click.echo(command)
+                for n, command in enumerate(command_list, 1):
+                    click.echo(f'{n}. {command}')
                 continue
             break
 
@@ -106,7 +106,9 @@ def print_version(ctx, param, value):
 @click.command()
 @click.option('--file', '-f', help='The path to the file with the command packs',
               type=click.Path(exists=True, dir_okay=False))
-@click.option('--default', '-d', is_flag=True, help='Run an additional batch of commands from default')
+@click.option('--default', '-d',
+              is_flag=True,
+              help='Run an additional batch of commands from default')
 @click.option('--name', '-n', help='Name of the package to run automatically')
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
@@ -180,29 +182,41 @@ def cli(file, default, name):
                         click.echo('Error! Name is too short!')
                         continue
                     break
-                file = commander.create_file(name)
+                file = commander.create_file(name, root=False)
                 click.edit(filename=file)
+                click.echo('The file is created in your home directory!')
+                click.open_file(filename=file)
             elif prompt == 3:
                 if not file:
-                    file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+                    file = click.prompt('File address',
+                                        type=click.Path(exists=True, dir_okay=False))
                 click.edit(filename=file)
                 continue
         if file:
             pack_dict = commander.open_json_file(file)
-            pack_objects = {key: commander.Pack(name=key, command_list=val) for key, val in pack_dict.items()}
+            pack_objects = {key: commander.Pack(name=key, command_list=val)
+                            for key, val in pack_dict.items()}
             if pack_dict:
                 if name and name in pack_dict:
                     pack_name = name
                 else:
                     pack_name = get_pack_name(file=file, pack_objects=pack_objects)
                 pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
-                start(pack_obj)
+                start(pack_obj=pack_obj)
+                if not default:
+                    commander.smart_print()
+                    user_input = click.prompt('Run the default package [y/n]?', type=str)
+                    if user_input == 'y':
+                        default = True
+                    else:
+                        default = False
                 if default and 'default' in pack_dict and pack_name != 'default':
                     pack_obj = commander.Pack(name='default', command_list=pack_dict['default'])
-                start(pack_obj=pack_obj)
-                break
+                    start(pack_obj=pack_obj)
             else:
-                click.echo('No data available... There may be an error in the configuration file')
+                click.echo('No data available... There may be '
+                           'an error in the configuration file')
+        break
     end_logo()
 
 

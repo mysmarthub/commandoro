@@ -6,7 +6,8 @@
 # Copyright © 2020-2021 Aleksandr Suvorov
 # -----------------------------------------------------------------------------
 """Settings for Commandoro"""
-FILE_NAME = '../config.json'
+
+FILE_NAME = 'config.json'
 PACKAGE = "commandoro"
 NAME = "commandoro"
 

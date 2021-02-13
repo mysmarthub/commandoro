@@ -1,7 +1,12 @@
 {
-    "New Pack": [],
-    "default": [],
-    "New pack name": [
-        "New command"
-    ]
+    "New Name":
+        [
+            "new command",
+            "other command"
+        ],
+    "default":
+        [
+            "new command",
+            "other command"
+        ]
 }

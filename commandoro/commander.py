@@ -10,16 +10,22 @@ import inspect
 import json
 import os
 import shutil
+from pathlib import Path
+
+
+HOME = str(Path.home())
 
 
 DEFAULT_JSON_DATA = {
     "New Name":
         [
-
+            "new command",
+            "other command"
         ],
     "default":
         [
-
+            "new command",
+            "other command"
         ]
 }
 
@@ -84,10 +90,13 @@ def smart_print(text='', char='-'):
         print(f''.center(columns, char))
 
 
-def create_file(file_name=''):
+def create_file(file_name='', root=False):
     if not file_name:
         file_name = 'config.json'
-    root_path = get_root_path(file_name)
+    if root:
+        root_path = get_root_path(file_name)
+    else:
+        root_path = os.path.join(HOME, file_name)
     with open(root_path, 'w') as f:
         json.dump(DEFAULT_JSON_DATA, f, indent=4)
     return root_path

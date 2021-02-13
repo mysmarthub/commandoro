@@ -26,6 +26,10 @@ If you can't find a way to donate, write to me:
  mailto: mysmarthub@ya.ru
 
 ---
+What's news?
+---
+Added the ability to create, open,
+edit files with command packages.
 
 
 Termux support:

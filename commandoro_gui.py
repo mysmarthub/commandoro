@@ -150,7 +150,7 @@ class MyWindow(QWidget):
         self.list_commands_default = QListWidget()
         self.list_commands_default.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
-        self.label_donat = QLabel('Donate: 4048 4150 0400 5852')
+        self.label_donat = QLabel('Donate: 4048 0250 0089 5923')
 
         self.btn_command_add = QPushButton('+ Add')
         self.btn_command_remove = QPushButton('- Remove')

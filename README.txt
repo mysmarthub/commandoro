@@ -1,7 +1,7 @@
 Commandoro
 ==========
 
-Console and graphical utility for automating command execution
+Console and graphical utility for automating command execution.
 
 Author and developer: Aleksandr Suvorov
 
@@ -18,7 +18,7 @@ Yandex money:
 
 https://yoomoney.ru/to/4100115206129186
 
-    Visa: 4048-4150-0400-5852
+    Visa: 4048 0250 0089 5923
 
 
 
@@ -36,10 +36,11 @@ Termux support:
 ---------------
 You can easily use the utility with Termux on mobile phones and tablets.
 
-1. Install Termux
-2. `pkg install python`
-3. `pip install commandoro`
-4. `commandoro --help`
+Install Termux
+
+`pkg install python`
+`pip install commandoro`
+`commandoro --help`
 
 ---
 
@@ -59,6 +60,7 @@ Commandoro - CLI utility for automatic command execution.
  and the packages are stored in a file.
 
  The program uses a file in json format with the structure:
+
 ```json
 {
   "Commands pack name": [
@@ -74,8 +76,9 @@ Commandoro - CLI utility for automatic command execution.
     "command two"
   ]
 }
+
 ```
- where keys are package names and values are lists of commands.
+where keys are package names and values are lists of commands.
 
  For convenience, you can create a package named "
 default" and store common commands in it, which are the same in some packages.
@@ -85,28 +88,7 @@ default" and store common commands in it, which are the same in some packages.
  after executing the main package of your choice.
 
 You can pass the file name as an argument when running -f [file path]
- or --file [file path], or use the default file, it should be
-in the same directory as the file being run and called "config.json".
-
-
----
-
-The GUI version:
-----------------
-
-Graphical utility for automating the execution of command packages,
-their creation, storage, editing, and launch.
-
-The graphical version allows you to open files with
-command packages, change, add, delete packages,
-save changes to a file, save all changes to a new file,
-view commands from each package, change, add and delete commands.
-Execute commands without saving to a file,
-edit packages and commands without saving,
-add, remove, and modify the default package and commands from this package.
-It has the function of recording work in a log file.
-
----
+ or --file [file path].
 
  You can also specify the name of the program using the -n or
  --name parameter, if you have a package with this name,
@@ -120,7 +102,7 @@ It has the function of recording work in a log file.
  To run some commands in graphical mode,
  you need to install dependencies on the administrator name:
 
-    sudo pip install -r commandoro/requirements.txt
+    sudo pip install -r requirements.txt
 
  With this utility, you can easily automate
 manual execution, storage, and automatic execution of commands.
@@ -162,15 +144,33 @@ the settings file under this name/key.
  Use -n [Command name] or --name [Command name] for automatic
   executing a batch of commands.
 
+The GUI version:
+----------------
+
+Graphical utility for automating the execution of command packages,
+their creation, storage, editing, and launch.
+
+The graphical version allows you to open files with
+command packages, change, add, delete packages,
+save changes to a file, save all changes to a new file,
+view commands from each package, change, add and delete commands.
+Execute commands without saving to a file,
+edit packages and commands without saving,
+add, remove, and modify the default package and commands from this package.
+It has the function of recording work in a log file.
+
+
 ---
 
 Help:
 ----
 
 ```
-Usage: commandoro.py [OPTIONS]
+ Usage: commandoro.py [OPTIONS]
 
     Commandoro - CLI utility for automatic command execution
+
+    and auto-tuning Linux distributions after installation.
 
     - To work, it uses files that store named command packages,     where the
     name is the name of the command package,     and the value is a list of
@@ -185,15 +185,11 @@ Usage: commandoro.py [OPTIONS]
     - You can pass the file name as an argument,     or use the default file,
     it should be located     in the same directory as the file being run.
 
-    -The console version allows you to run a script in the terminal,
-    passing it a file with settings as an argument,     or use the default
-    file. In the process, you select the desired     command package, then you
-    can start execution,     display a list of commands for this package,
-    or return to the selection of the command package.
-
-    - After executing all the commands,     the program goes to the main menu
-    and again waits for     input to select the desired package, or exit the
-    program.
+    -The console version allows you to run a script in the terminal, passing
+    it a file with settings as an argument,     or use the default file. In
+    the process, you select the desired     command package, then you can
+    start execution,     display a list of commands for this package, or
+    return to the selection of the command package.
 
     - You can pass the name of the desired package,     and if it exists
     inside the file with the command settings from it     will be executed.
@@ -204,13 +200,26 @@ Usage: commandoro.py [OPTIONS]
 
     python commandoro.py --file config.json -d --name Ubuntu
 
+    python commandoro.py --file config.json -d --name Ubuntu -y
+
+    or
+
+    commandoro --file config.json -d
+
+    commandoro --file config.json -d --name Ubuntu -y
+
   Options:
-    -f, --file TEXT  The path to the file with the command packs
+    -f, --file FILE  The path to the file with the command packs
     -d, --default    Run an additional batch of commands from default
     -n, --name TEXT  Name of the package to run automatically
+    -v, --version    Displays the version of the program and exits.
+    -y, --yes        Auto Mode
     --help           Show this message and exit.
 
+
 ```
+
+---
 
 ---
 
@@ -304,3 +313,9 @@ https://github.com/pallets/click
  by license:
 
  https://github.com/pallets/click/blob/master/LICENSE.rst
+
+
+Support:
+---
+    Email: mysmarthub@ya.ru
+    Copyright © 2020-2021 Aleksandr Suvorov

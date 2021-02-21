@@ -73,7 +73,7 @@ def get_pack_name(file, pack_objects: dict):
             break
 
 
-def start(pack_obj):
+def start(pack_obj, yes=True):
     count = 0
     errors = []
     click.echo()
@@ -81,9 +81,14 @@ def start(pack_obj):
     commander.smart_print()
     for command in pack_obj.command_list:
         count += 1
-        click.echo()
         msg = f'[execute {count}]: {command}'
         click.echo(msg)
+        if not yes:
+            if not click.confirm('Do you want to continue?'):
+                click.echo('Skipped!')
+                continue
+
+        click.echo()
         status = commander.executor(command)
         if status:
             click.echo('[Successfully]')
@@ -113,49 +118,49 @@ def print_version(ctx, param, value):
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
               expose_value=False, is_eager=True)
-def cli(file, default, name):
+@click.option('--yes', '-y',
+              is_flag=True,
+              help='Auto Mode')
+def cli(file, default, name, yes):
     """Commandoro - CLI utility for automatic command execution
 
     and auto-tuning Linux distributions after installation.
 
-    - To work, the utility uses files that store named command packages,
-        where the name is the name of the command package,
-        and the value is a list of commands.
+    - To work, it uses files that store named command packages,     where the
+    name is the name of the command package,     and the value is a list of
+    commands.
 
-    - You can create your own files with command packages using
+        You can create your own files with command packages using         the
         default structure.
 
-    - Use the name "default" for the package with the default commands.
-        You can run them in addition to the selected batch of commands.
+    - Use the default name for the package with the default commands.     You
+    can perform them in addition to the selected command package.
 
-    - You can pass the file name as an argument
-        or use the default file, it should be located
-        in the same directory as the file being run.
+    - You can pass the file name as an argument,     or use the default file,
+    it should be located     in the same directory as the file being run.
 
-    - The console version allows you to run the script in the terminal,
-        passing it a file with the settings as an argument,
-        or use the default file. In the process of working,
-        you choose the right one command package,
-        after which you can start executing, display a list
-        of commands for this package,
-        or go back to selecting the command package.
+    -The console version allows you to run a script in the terminal,
+    passing it a file with settings as an argument,     or use the default
+    file. In the process, you select the desired     command package, then you
+    can start execution,     display a list of commands for this package,
+    or return to the selection of the command package.
 
-    - Using the -n or --name parameter, you can specify the name
-        of the command package at startup,
-        then the utility will immediately start automatic execution
-        of commands from this package.
+    - You can pass the name of the desired package,     and if it exists
+    inside the file with the command settings from it     will be executed.
 
-    - Examples of implementation:
+    - The examples run:
 
     python commandoro.py --file config.json -d
 
     python commandoro.py --file config.json -d --name Ubuntu
 
+    python commandoro.py --file config.json -d --name Ubuntu -y
+
     or
 
     commandoro --file config.json -d
 
-    commandoro --file config.json -d --name Ubuntu
+    commandoro --file config.json -d --name Ubuntu -y
 
     """
     start_logo()
@@ -202,8 +207,8 @@ def cli(file, default, name):
                 else:
                     pack_name = get_pack_name(file=file, pack_objects=pack_objects)
                 pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
-                start(pack_obj=pack_obj)
-                if not default:
+                start(pack_obj=pack_obj, yes=yes)
+                if not default and 'default' in pack_dict:
                     commander.smart_print()
                     user_input = click.prompt('Run the default package [y/n]?', type=str)
                     if user_input == 'y':

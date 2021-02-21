@@ -13,7 +13,7 @@ NAME = "commandoro"
 
 TITLE = 'Commandoro'
 DESCRIPTION = 'Cli utility for automatic command execution'
-VERSION = '0.0.9'
+VERSION = '1.0.0'
 
 AUTHOR = 'Aleksandr Suvorov'
 EMAIL = 'mysmarthub@ya.ru'
@@ -23,6 +23,7 @@ README_URL = 'https://github.com/mysmarthub/commandoro/blob/master/README.md'
 
 YANDEX = 'https://yoomoney.ru/to/4100115206129186'
 PAYPAL = 'https://paypal.me/myhackband'
+CARD = '4048 0250 0089 5923'
 
 LICENSE = "BSD 3-Clause License"
 COPYRIGHT = 'Copyright © 2020-2021 Aleksandr Suvorov'

@@ -39,8 +39,12 @@ def get_pack_name(file, pack_objects: dict):
         commander.smart_print('Command packages:')
         for n, name in num_pack.items():
             click.echo(f'{n}. {name} | Commands[{pack_objects[name].count}]')
+        click.echo('0. Close File')
         commander.smart_print()
-        num = click.prompt(text='Enter the package (ctrl+c for exit)', type=int)
+        num = click.prompt(text='Enter the package', type=int)
+        if not num:
+            return False
+
         if num not in num_pack:
             commander.smart_print()
             click.echo('Input Error!')
@@ -206,6 +210,11 @@ def cli(file, default, name, yes):
                     pack_name = name
                 else:
                     pack_name = get_pack_name(file=file, pack_objects=pack_objects)
+
+                if not pack_name:
+                    file = None
+                    continue
+
                 pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
                 start(pack_obj=pack_obj, yes=yes)
                 if not default and 'default' in pack_dict:

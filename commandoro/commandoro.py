@@ -88,6 +88,7 @@ def start(pack_obj, yes=True):
         msg = f'[execute {count}]: {command}'
         click.echo(msg)
         if not yes:
+            commander.smart_print()
             if not click.confirm('Do you want to continue?'):
                 click.echo('Skipped!')
                 continue
@@ -217,16 +218,16 @@ def cli(file, default, name, yes):
 
                 pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
                 start(pack_obj=pack_obj, yes=yes)
-                if not default and 'default' in pack_dict:
+                if default and 'default' in pack_dict and pack_name != 'default':
                     commander.smart_print()
                     user_input = click.prompt('Run the default package [y/n]?', type=str)
                     if user_input == 'y':
                         default = True
                     else:
                         default = False
-                if default and 'default' in pack_dict and pack_name != 'default':
-                    pack_obj = commander.Pack(name='default', command_list=pack_dict['default'])
-                    start(pack_obj=pack_obj)
+                    if default:
+                        pack_obj = commander.Pack(name='default', command_list=pack_dict['default'])
+                start(pack_obj=pack_obj)
             else:
                 click.echo('No data available... There may be '
                            'an error in the configuration file')

@@ -40,7 +40,7 @@ def get_pack_name(pack_objects: dict):
         commander.smart_print()
         num = click.prompt(text='Enter the package', type=int)
         if not num:
-            return False
+            return None
 
         if num not in num_pack:
             commander.smart_print()
@@ -109,6 +109,45 @@ def print_version(ctx, param, value):
     ctx.exit()
 
 
+def get_file():
+    while 1:
+        commander.smart_print('File information')
+        click.echo('The file is not found...')
+        commander.smart_print()
+        click.echo('1. Open')
+        click.echo('2. Create')
+        click.echo('3. Edit')
+        click.echo('0. Exit')
+        commander.smart_print()
+        prompt = click.prompt('Enter', type=int)
+        commander.smart_print()
+
+        if not prompt:
+            return False
+
+        elif prompt == 1:
+            file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+            return file
+
+        elif prompt == 2:
+            while 1:
+                name = click.prompt('File name')
+                if len(name) < 4:
+                    click.echo('Error! Name is too short!')
+                    continue
+                break
+            file = commander.create_file(name, root=False)
+            click.edit(filename=file)
+            click.echo('The file is created in your home directory!')
+            click.open_file(filename=file)
+            return file
+
+        elif prompt == 3:
+            file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+            click.edit(filename=file)
+            return file
+
+
 @click.command()
 @click.option('--file', '-f', help='The path to the file with the command packs',
               type=click.Path(exists=True, dir_okay=False))
@@ -167,42 +206,9 @@ def cli(file, default, name, yes):
     start_logo()
 
     while 1:
-        if not file:
-            commander.smart_print('File information')
-            click.echo('The file is not found...')
-            commander.smart_print()
-            click.echo('1. Open')
-            click.echo('2. Create')
-            click.echo('3. Edit')
-            click.echo('0. Exit')
-            commander.smart_print()
-            prompt = click.prompt('Enter', type=int)
-            commander.smart_print()
 
-            if not prompt:
-                break
-
-            elif prompt == 1:
-                file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
-
-            elif prompt == 2:
-                while 1:
-                    name = click.prompt('File name')
-                    if len(name) < 4:
-                        click.echo('Error! Name is too short!')
-                        continue
-                    break
-                file = commander.create_file(name, root=False)
-                click.edit(filename=file)
-                click.echo('The file is created in your home directory!')
-                click.open_file(filename=file)
-
-            elif prompt == 3:
-                if not file:
-                    file = click.prompt('File address',
-                                        type=click.Path(exists=True, dir_okay=False))
-                click.edit(filename=file)
-                continue
+        if file is None:
+            file = get_file()
 
         if file:
             commander.smart_print('File information')
@@ -234,9 +240,19 @@ def cli(file, default, name, yes):
                     if pack_obj:
                         start(pack_obj=pack_obj, yes=yes)
             else:
+                commander.smart_print()
                 click.echo('No data available... There may be '
-                           'an error in the configuration file')
-        break
+                           'an error in the configuration file!')
+
+            if not name and not yes:
+                commander.smart_print()
+                user_input = click.prompt('End the program? [y/n]?', type=str)
+                if user_input == 'y':
+                    break
+                else:
+                    continue
+        else:
+            break
     end_logo()
 
 

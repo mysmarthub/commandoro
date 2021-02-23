@@ -32,7 +32,10 @@ DEFAULT_JSON_DATA = {
 class Pack:
     def __init__(self, name, command_list):
         self.name = name
-        self.command_list = command_list
+        self.command_list: list = command_list
+
+    def clear(self):
+        self.command_list.clear()
 
     @property
     def count(self):

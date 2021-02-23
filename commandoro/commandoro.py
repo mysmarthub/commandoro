@@ -21,7 +21,6 @@ def start_logo():
     commander.smart_print('', '*')
     commander.smart_print(f'{settings.TITLE} v{settings.VERSION}', '=')
     commander.smart_print(f'{settings.DESCRIPTION}', '-')
-    commander.smart_print()
 
 
 def end_logo():
@@ -30,12 +29,10 @@ def end_logo():
     commander.smart_print('', '*')
 
 
-def get_pack_name(file, pack_objects: dict):
+def get_pack_name(pack_objects: dict):
     num_pack = {n: name for n, name in enumerate(pack_objects.keys(), 1)}
     while 1:
         """Shows a simple menu."""
-        commander.smart_print('File information')
-        click.echo(f'File: [{file}]')
         commander.smart_print('Command packages:')
         for n, name in num_pack.items():
             click.echo(f'{n}. {name} | Commands[{pack_objects[name].count}]')
@@ -59,30 +56,29 @@ def get_pack_name(file, pack_objects: dict):
             commander.smart_print()
             click.echo('1. Start')
             click.echo('2. Show commands')
-            click.echo('3. Cancel')
+            click.echo('0. Cancel')
             commander.smart_print()
             user_input = click.prompt(text='Enter the desired number', type=int)
-            commander.smart_print()
-            if user_input not in (1, 2, 3):
-                click.echo('Input Error!')
-                input('Enter for continue ...')
+            if not user_input:
+                break
             elif user_input == 1:
                 return pack_name
             elif user_input == 2:
-                click.echo()
-                click.echo(f'{pack_name} commands: ')
+                commander.smart_print(f'{pack_name} commands: ')
                 for n, command in enumerate(command_list, 1):
                     click.echo(f'{n}. {command}')
-                continue
-            break
+            else:
+                commander.smart_print()
+                click.echo('Input Error!')
+            commander.smart_print()
+            input('Enter for continue ... ')
 
 
 def start(pack_obj, yes=True):
     count = 0
     errors = []
     click.echo()
-    click.echo(f'Pack name: [{pack_obj.name}]')
-    commander.smart_print()
+    commander.smart_print(f'Pack name: [{pack_obj.name}]')
     for command in pack_obj.command_list:
         count += 1
         msg = f'[execute {count}]: {command}'
@@ -172,6 +168,7 @@ def cli(file, default, name, yes):
 
     while 1:
         if not file:
+            commander.smart_print('File information')
             click.echo('The file is not found...')
             commander.smart_print()
             click.echo('1. Open')
@@ -181,10 +178,13 @@ def cli(file, default, name, yes):
             commander.smart_print()
             prompt = click.prompt('Enter', type=int)
             commander.smart_print()
+
             if not prompt:
                 break
+
             elif prompt == 1:
                 file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+
             elif prompt == 2:
                 while 1:
                     name = click.prompt('File name')
@@ -196,13 +196,17 @@ def cli(file, default, name, yes):
                 click.edit(filename=file)
                 click.echo('The file is created in your home directory!')
                 click.open_file(filename=file)
+
             elif prompt == 3:
                 if not file:
                     file = click.prompt('File address',
                                         type=click.Path(exists=True, dir_okay=False))
                 click.edit(filename=file)
                 continue
+
         if file:
+            commander.smart_print('File information')
+            click.echo(f'File: [{file}]')
             pack_dict = commander.open_json_file(file)
             pack_objects = {key: commander.Pack(name=key, command_list=val)
                             for key, val in pack_dict.items()}
@@ -210,7 +214,7 @@ def cli(file, default, name, yes):
                 if name and name in pack_dict:
                     pack_name = name
                 else:
-                    pack_name = get_pack_name(file=file, pack_objects=pack_objects)
+                    pack_name = get_pack_name(pack_objects=pack_objects)
 
                 if not pack_name:
                     file = None
@@ -218,16 +222,17 @@ def cli(file, default, name, yes):
 
                 pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
                 start(pack_obj=pack_obj, yes=yes)
-                if default and 'default' in pack_dict and pack_name != 'default':
-                    commander.smart_print()
-                    user_input = click.prompt('Run the default package [y/n]?', type=str)
-                    if user_input == 'y':
-                        default = True
+                pack_obj.clear()
+                if 'default' in pack_dict and pack_name != 'default':
+                    if not default:
+                        commander.smart_print()
+                        user_input = click.prompt('Run the default package [y/n]?', type=str)
+                        if user_input == 'y':
+                            pack_obj = commander.Pack('default', pack_dict["default"])
                     else:
-                        default = False
-                    if default:
-                        pack_obj = commander.Pack(name='default', command_list=pack_dict['default'])
-                start(pack_obj=pack_obj)
+                        pack_obj = commander.Pack('default', pack_dict["default"])
+                    if pack_obj:
+                        start(pack_obj=pack_obj, yes=yes)
             else:
                 click.echo('No data available... There may be '
                            'an error in the configuration file')

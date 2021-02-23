@@ -230,7 +230,7 @@ def cli(file, default, name, yes):
                 start(pack_obj=pack_obj, yes=yes)
                 pack_obj.clear()
                 if 'default' in pack_dict and pack_name != 'default':
-                    if not default:
+                    if not default and not name:
                         commander.smart_print()
                         user_input = click.prompt('Run the default package [y/n]?', type=str)
                         if user_input == 'y':
@@ -244,13 +244,15 @@ def cli(file, default, name, yes):
                 click.echo('No data available... There may be '
                            'an error in the configuration file!')
 
-            if not name and not yes:
+            if not name or not yes:
                 commander.smart_print()
                 user_input = click.prompt('End the program? [y/n]?', type=str)
                 if user_input == 'y':
                     break
                 else:
                     continue
+            else:
+                break
         else:
             break
     end_logo()

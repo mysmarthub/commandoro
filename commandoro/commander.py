@@ -16,7 +16,7 @@ HOME = str(Path.home())
 
 
 DEFAULT_JSON_DATA = {
-    "New Name":
+    "Name1":
         [
             "new command",
             "other command"

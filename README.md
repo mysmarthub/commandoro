@@ -62,7 +62,7 @@ You can easily use the utility with Termux on mobile phones and tablets.
 
 `pkg install python`
 
-`pip install commandoro`
+`pip install commandoro --force`
 
 `commandoro --help`
 
@@ -191,56 +191,41 @@ Help:
 ----
 
 ```
- Usage: commandoro.py [OPTIONS]
+Usage: commandoro.py [OPTIONS]
 
-    Commandoro - CLI utility for automatic command execution
-  
-    and auto-tuning Linux distributions after installation.
-  
-    - To work, it uses files that store named command packages,     where the
-    name is the name of the command package,     and the value is a list of
-    commands.
-  
-        You can create your own files with command packages using         the
-        default structure.
-  
-    - Use the default name for the package with the default commands.     You
-    can perform them in addition to the selected command package.
-  
-    - You can pass the file name as an argument,     or use the default file,
-    it should be located     in the same directory as the file being run.
-  
-    -The console version allows you to run a script in the terminal, passing
-    it a file with settings as an argument,     or use the default file. In
-    the process, you select the desired     command package, then you can
-    start execution,     display a list of commands for this package, or
-    return to the selection of the command package.
-  
-    - You can pass the name of the desired package,     and if it exists
-    inside the file with the command settings from it     will be executed.
-  
-    - The examples run:
-  
-    python commandoro.py --file config.json -d
-  
-    python commandoro.py --file config.json -d --name Ubuntu
-  
-    python commandoro.py --file config.json -d --name Ubuntu -y
-  
-    or
-  
-    commandoro --file config.json -d
-  
-    commandoro --file config.json -d --name Ubuntu -y
-  
-  Options:
-    -f, --file FILE  The path to the file with the command packs
-    -d, --default    Run an additional batch of commands from default
-    -n, --name TEXT  Name of the package to run automatically
-    -v, --version    Displays the version of the program and exits.
-    -y, --yes        Auto Mode
-    --help           Show this message and exit.
+  Commandoro - CLI utility for automatic command execution.
 
+  - To work, it uses files that store named command packages,     where
+  the name is the name of the command package,     and the value is a
+  list of commands.
+
+  - You can create your own files with command packages using the
+  default structure, and pass the path to them as an argument at startup
+  and pass the path to them as an argument at startup.
+
+  - Use the name - "default" - name for the package with the default
+  commands. You can perform them in addition to the selected command
+  package.
+
+  Author and developer: Aleksandr Suvorov
+
+  Url: https://github.com/mysmarthub/
+
+  Email: mysmarthub@ya.ru
+
+  Donate: https://paypal.me/myhackband
+
+  https://yoomoney.ru/to/4100115206129186
+
+  4048 0250 0089 5923
+
+Options:
+  -f, --file FILE  The path to the file with the command packs
+  -d, --default    Run an additional batch of commands from default
+  -n, --name TEXT  Name of the package
+  -v, --version    Displays the version of the program and exits.
+  -y, --yes        Auto command execution
+  --help           Show this message and exit.
 
 ```
 
@@ -260,16 +245,18 @@ Installation and launch:
 
 `commandoro`
 
-`commandoro --file config.json -d`
+`commandoro --file config.json`
 
-`commandoro --file=config.json --name=Ubuntu -d -y`
+`commandoro --file config.json --name Ubuntu -d -y`
 
 > On some systems, some commands require administrator rights,
  so you can install the utility and run it further using:
 
 `sudo pip install commandoro`
 
-`sudo commandoro --file=config.json --name=Ubuntu -d`
+`sudo commandoro`
+
+`sudo commandoro --file config.json --name Ubuntu -d -y`
 
 > You can download the source files and run using Python:
 
@@ -281,18 +268,19 @@ Installation and launch:
 
 `pip install -r requirements`
 
-`python commandoro/commandoro.py --file=commandoro/config.json`
+`python commandoro.py --file commandoro/config.json`
 
 or
 
 `sudo pip install -r requirements`
 
-`sudo python commandoro/commandoro/commandoro.py`
+`sudo python commandoro.py`
 
     Commandoro Gui:
     ---------------
 
-    pip install -r commandoro/requirements.txt
+    pip install -r requirements.txt
+    
     python commandoro_gui.py
 
     Sudo Commandoro Gui:

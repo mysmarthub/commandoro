@@ -13,7 +13,7 @@ NAME = "commandoro"
 
 TITLE = 'Commandoro'
 DESCRIPTION = 'Cli utility for automatic command execution'
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 AUTHOR = 'Aleksandr Suvorov'
 EMAIL = 'mysmarthub@ya.ru'

@@ -11,10 +11,7 @@ import os
 import shutil
 from pathlib import Path
 
-
 HOME = str(Path.home())
-
-
 DEFAULT_JSON_DATA = {
     "Name1":
         [

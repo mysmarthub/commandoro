@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # Licensed under the terms of the BSD 3-Clause License
@@ -29,16 +29,80 @@ def end_logo():
     commander.smart_print('', '*')
 
 
-def get_pack_name(pack_objects: dict):
+def print_version(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+    click.echo(f'{settings.TITLE} {settings.VERSION} - {settings.COPYRIGHT}')
+    ctx.exit()
+
+
+def open_file_dialog():
+    file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+    return file
+
+
+def create_file_dialog():
+    while 1:
+        name = click.prompt('File name')
+        if len(name) < 4:
+            click.echo('Error! Name is too short!')
+            continue
+        break
+    file = commander.create_file(name, root=False)
+    click.edit(filename=file)
+    click.echo('The file is created in your home directory!')
+    click.open_file(filename=file)
+    return file
+
+
+def edit_file_dialog(file=None):
+    if file is None:
+        file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
+    click.edit(filename=file)
+    return file
+
+
+def open_url(url):
+    click.launch(url=url)
+
+
+def get_file_menu():
+    while 1:
+        commander.smart_print('File menu')
+        click.echo('o: open ')
+        click.echo('c: create ')
+        click.echo('e: edit ')
+        click.echo('h: help ')
+        click.echo('q: quit ')
+        commander.smart_print()
+        char = click.getchar()
+        if char in ('q', 'й'):
+            return 'exit'
+        elif char in ('o', 'щ'):
+            file = open_file_dialog()
+        elif char in ('c', 'с'):
+            file = create_file_dialog()
+        elif char in ('e', 'у'):
+            file = edit_file_dialog()
+        elif char in ('h', 'р'):
+            open_url(settings.README_URL)
+            continue
+        else:
+            continue
+        return file
+
+
+def get_name_menu(pack_objects):
     num_pack = {n: name for n, name in enumerate(pack_objects.keys(), 1)}
     while 1:
         """Shows a simple menu."""
         commander.smart_print('Command packages:')
         for n, name in num_pack.items():
-            click.echo(f'{n}. {name} | Commands[{pack_objects[name].count}]')
-        click.echo('0. Close File')
+            click.echo(f'{n}: {name} | Commands[{pack_objects[name].count}]')
+        click.echo('0: open new file')
         commander.smart_print()
         num = click.prompt(text='Enter the package', type=int)
+
         if not num:
             return None
 
@@ -48,28 +112,41 @@ def get_pack_name(pack_objects: dict):
             input('Enter for continue ...')
             continue
         pack_name = num_pack[num]
-        command_list = pack_objects[pack_name].command_list
-        while 1:
-            commander.smart_print()
-            click.echo(f'The selected package {num_pack[num]} | '
-                       f'Commands:[{pack_objects[pack_name].count}]')
-            commander.smart_print()
-            click.echo('1. Start')
-            click.echo('2. Show commands')
-            click.echo('0. Cancel')
-            commander.smart_print()
-            user_input = click.prompt(text='Enter the desired number', type=int)
-            if not user_input:
-                break
-            elif user_input == 1:
-                return pack_name
-            elif user_input == 2:
-                commander.smart_print(f'{pack_name} commands: ')
-                for n, command in enumerate(command_list, 1):
-                    click.echo(f'{n}. {command}')
-            else:
-                commander.smart_print()
-                click.echo('Input Error!')
+        return pack_name
+
+
+def get_action(title):
+    while 1:
+        click.echo(title)
+        click.echo('y: yes')
+        click.echo('n: no')
+        char = click.getchar()
+        if char == 'y':
+            return True
+        elif char == 'n':
+            return False
+        else:
+            continue
+
+
+def get_pack_action(pack_obj: commander.Pack):
+    while 1:
+        commander.smart_print('Pack menu')
+        click.echo(f'The selected package {pack_obj.name} | '
+                   f'Commands:[{pack_obj.count}]')
+        commander.smart_print()
+        click.echo('s: start')
+        click.echo('p: print commands')
+        click.echo('b. back')
+        char = click.getchar()
+        if char in ('b', 'и'):
+            return False
+        elif char in ('s', 'ы'):
+            return True
+        elif char in ('p', 'з'):
+            commander.smart_print(f'[{pack_obj.name}]:Command list({pack_obj.count})')
+            for n, command in enumerate(pack_obj.command_list, 1):
+                click.echo(f'{n}. {command}')
             commander.smart_print()
             input('Enter for continue ... ')
 
@@ -80,72 +157,27 @@ def start(pack_obj, yes=True):
     click.echo()
     commander.smart_print(f'Pack name: [{pack_obj.name}]')
     for command in pack_obj.command_list:
+        commander.smart_print('', '=')
         count += 1
-        msg = f'[execute {count}]: {command}'
+        msg = f'[execute {count}]:[command]: {command}'
         click.echo(msg)
-        if not yes:
-            commander.smart_print()
-            if not click.confirm('Do you want to continue?'):
-                click.echo('Skipped!')
-                continue
-
-        click.echo()
-        status = commander.executor(command)
-        if status:
-            click.echo('[Successfully]')
+        if yes:
+            work = True
         else:
-            errors.append(f'Error: {msg}')
-            click.echo('[Error]')
-        commander.smart_print()
-    commander.smart_print('', '=')
+            work = get_action('Do you want to continue?')
+
+        if work:
+            status = commander.executor(command)
+            if status:
+                click.echo('+ [Successfully!]')
+            else:
+                errors.append(f'Error: {msg}')
+                click.echo('- [Error!!!]')
+        else:
+            click.echo('[Skipped...]')
+    commander.smart_print('', '*')
     click.echo(f'The command package [{pack_obj.name}] is executed.')
     click.echo(f'Commands completed: [{count - len(errors)}] | Errors: [{len(errors)}]')
-
-
-def print_version(ctx, param, value):
-    if not value or ctx.resilient_parsing:
-        return
-    click.echo(f'{settings.TITLE} {settings.VERSION} - {settings.COPYRIGHT}')
-    ctx.exit()
-
-
-def get_file():
-    while 1:
-        commander.smart_print('File information')
-        click.echo('The file is not found...')
-        commander.smart_print()
-        click.echo('1. Open')
-        click.echo('2. Create')
-        click.echo('3. Edit')
-        click.echo('0. Exit')
-        commander.smart_print()
-        prompt = click.prompt('Enter', type=int)
-        commander.smart_print()
-
-        if not prompt:
-            return False
-
-        elif prompt == 1:
-            file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
-            return file
-
-        elif prompt == 2:
-            while 1:
-                name = click.prompt('File name')
-                if len(name) < 4:
-                    click.echo('Error! Name is too short!')
-                    continue
-                break
-            file = commander.create_file(name, root=False)
-            click.edit(filename=file)
-            click.echo('The file is created in your home directory!')
-            click.open_file(filename=file)
-            return file
-
-        elif prompt == 3:
-            file = click.prompt('File address', type=click.Path(exists=True, dir_okay=False))
-            click.edit(filename=file)
-            return file
 
 
 @click.command()
@@ -154,107 +186,120 @@ def get_file():
 @click.option('--default', '-d',
               is_flag=True,
               help='Run an additional batch of commands from default')
-@click.option('--name', '-n', help='Name of the package to run automatically')
+@click.option('--name', '-n', help='Name of the package')
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
               expose_value=False, is_eager=True)
 @click.option('--yes', '-y',
               is_flag=True,
-              help='Auto Mode')
+              help='Auto command execution')
 def cli(file, default, name, yes):
-    """Commandoro - CLI utility for automatic command execution
+    """Commandoro - CLI utility for automatic command execution.
 
-    and auto-tuning Linux distributions after installation.
+        - To work, it uses files that store named command packages,     where the
+        name is the name of the command package,     and the value is a list of
+        commands.
 
-    - To work, it uses files that store named command packages,     where the
-    name is the name of the command package,     and the value is a list of
-    commands.
+        - You can create your own files with command packages using the default structure,
+        and pass the path to them as an argument at startup and pass the path to
+        them as an argument at startup.
 
-        You can create your own files with command packages using         the
-        default structure.
+        - Use the name - "default" - name for the package with the default commands.
+        You can perform them in addition to the selected command package.
 
-    - Use the default name for the package with the default commands.     You
-    can perform them in addition to the selected command package.
 
-    - You can pass the file name as an argument,     or use the default file,
-    it should be located     in the same directory as the file being run.
+        Author and developer: Aleksandr Suvorov
 
-    -The console version allows you to run a script in the terminal,
-    passing it a file with settings as an argument,     or use the default
-    file. In the process, you select the desired     command package, then you
-    can start execution,     display a list of commands for this package,
-    or return to the selection of the command package.
+        Url: https://github.com/mysmarthub/
 
-    - You can pass the name of the desired package,     and if it exists
-    inside the file with the command settings from it     will be executed.
+        Email: mysmarthub@ya.ru
 
-    - The examples run:
+        Donate: https://paypal.me/myhackband
 
-    python commandoro.py --file config.json -d
+        https://yoomoney.ru/to/4100115206129186
 
-    python commandoro.py --file config.json -d --name Ubuntu
-
-    python commandoro.py --file config.json -d --name Ubuntu -y
-
-    or
-
-    commandoro --file config.json -d
-
-    commandoro --file config.json -d --name Ubuntu -y
-
-    """
+        4048 0250 0089 5923
+        """
     start_logo()
-
-    while 1:
+    while file != 'exit':
 
         if file is None:
-            file = get_file()
+            commander.smart_print('File information')
+            click.echo(f'File not found... ')
+            file = get_file_menu()
+
+        if file == 'exit':
+            break
 
         if file:
             commander.smart_print('File information')
             click.echo(f'File: [{file}]')
+
             pack_dict = commander.open_json_file(file)
+
+            if not pack_dict:
+                click.echo('No data available... There may be '
+                           'an error in the configuration file!')
+                click.echo('Close file...')
+                file = None
+                continue
+
             pack_objects = {key: commander.Pack(name=key, command_list=val)
                             for key, val in pack_dict.items()}
-            if pack_dict:
-                if name and name in pack_dict:
-                    pack_name = name
-                else:
-                    pack_name = get_pack_name(pack_objects=pack_objects)
 
-                if not pack_name:
-                    file = None
-                    continue
+            if name and name in pack_dict:
+                pack_name = name
+            else:
+                pack_name = get_name_menu(pack_objects=pack_objects)
 
-                pack_obj = commander.Pack(pack_name, pack_dict[pack_name])
-                start(pack_obj=pack_obj, yes=yes)
-                pack_obj.clear()
+            if pack_name is None:
+                file = None
+                continue
+
+            if name and name in pack_dict:
+                action = True
+            else:
+                action = get_pack_action(pack_obj=pack_objects[pack_name])
+
+            if action:
+                commander.smart_print()
+                click.echo(f'[pack name]:[{pack_name}]')
+                click.echo('Getting started...')
+                if not yes:
+                    commander.smart_print()
+                    yes = get_action(title='Execute commands automatically?')
+                start(pack_obj=pack_objects[pack_name], yes=yes)
                 if 'default' in pack_dict and pack_name != 'default':
-                    if not default and not name:
+                    if not default and not yes:
                         commander.smart_print()
-                        user_input = click.prompt('Run the default package [y/n]?', type=str)
-                        if user_input == 'y':
+                        user_input = get_action(title='Run the default package?')
+                        if user_input:
                             pack_obj = commander.Pack('default', pack_dict["default"])
+                        else:
+                            pack_obj = None
                     else:
                         pack_obj = commander.Pack('default', pack_dict["default"])
                     if pack_obj:
                         start(pack_obj=pack_obj, yes=yes)
-            else:
-                commander.smart_print()
-                click.echo('No data available... There may be '
-                           'an error in the configuration file!')
 
-            if not name or not yes:
-                commander.smart_print()
-                user_input = click.prompt('End the program? [y/n]?', type=str)
-                if user_input == 'y':
-                    break
+                if yes:
+                    file = 'exit'
                 else:
-                    continue
-            else:
+                    commander.smart_print()
+                    user_input = get_action('Continue work?')
+                    if user_input:
+                        name = None
+                        continue
+                    else:
+                        break
+
+            elif action is None:
+                click.echo('\nExit...')
                 break
-        else:
-            break
+
+            else:
+                continue
+
     end_logo()
 
 

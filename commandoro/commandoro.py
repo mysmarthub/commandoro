@@ -42,12 +42,8 @@ def open_file_dialog():
 
 
 def create_file_dialog():
-    while 1:
-        name = click.prompt('File name')
-        if len(name) < 4:
-            click.echo('Error! Name is too short!')
-            continue
-        break
+    name: str = click.prompt('File name', type=str)
+    name = name.replace(' ', '_')
     file = commander.create_file(f'{name}_commands.json', root=False)
     click.edit(filename=file)
     click.echo('The file is created in your home directory!')
@@ -98,7 +94,7 @@ def get_name_menu(pack_objects):
         """Shows a simple menu."""
         commander.smart_print('Command packages:')
         for n, name in num_pack.items():
-            click.echo(f'{n}: [name]:{name}:[commands]:{pack_objects[name].count}')
+            click.echo(f'{n}: {name}: Commands:{pack_objects[name].count}')
         click.echo('0: open new file')
         commander.smart_print()
         num = click.prompt(text='Enter the package', type=int)
@@ -132,7 +128,7 @@ def get_action(title):
 def get_pack_action(pack_obj: commander.Pack):
     while 1:
         commander.smart_print('Pack menu')
-        click.echo(f'The selected package: [name]:{pack_obj.name}:[commands]:{pack_obj.count}')
+        click.echo(f'The selected package: {pack_obj.name}({pack_obj.count})')
         commander.smart_print()
         click.echo('s: start')
         click.echo('p: print commands')
@@ -143,7 +139,7 @@ def get_pack_action(pack_obj: commander.Pack):
         elif char in ('s', 'ы'):
             return True
         elif char in ('p', 'з'):
-            commander.smart_print(f'[name]:{pack_obj.name}:[commands]:{pack_obj.count}')
+            commander.smart_print(f'{pack_obj.name} - commands:{pack_obj.count}')
             for n, command in enumerate(pack_obj.command_list, 1):
                 click.echo(f'{n}. {command}')
             commander.smart_print()
@@ -158,7 +154,7 @@ def start(pack_obj, auto=True):
     for command in pack_obj.command_list:
         commander.smart_print('', '=')
         count += 1
-        msg = f'{count}: [execute]:[command]:{command}'
+        msg = f'{count}: [execute]:{pack_obj.name}:{command}'
         click.echo(msg)
         if auto:
             work = True
@@ -183,38 +179,51 @@ def start(pack_obj, auto=True):
 @click.option('--file', '-f', help='The path to the file with the command packs',
               type=click.Path(exists=True, dir_okay=False))
 @click.option('--name', '-n', help='Name of the package')
-@click.option('--auto', '-a',
-              is_flag=True,
-              help='Auto command execution')
+@click.option('--auto', '-a', is_flag=True, help='Auto command execution, auto exit')
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
               expose_value=False, is_eager=True)
 def cli(file, name, auto):
     """Commandoro - CLI utility for automatic command execution.
 
-        - To work, it uses files that store named command packages,     where the
-        name is the name of the command package,     and the value is a list of
-        commands.
 
-        - You can create your own files with command packages using the default structure,
-        and pass the path to them as an argument at startup and pass the path to
-        them as an argument at startup.
+    - Run the utility without parameters to manually select options.
 
-        - Use the name - "default" - name for the package with the default commands.
-        You can perform them in addition to the selected command package.
+    Example:
+    commandoro
+    python commandoro.py
 
 
-        Author and developer: Aleksandr Suvorov
+    - Use the option -f/--file [filename] to select a file with command packages.
 
-        Url: https://github.com/mysmarthub/
+    Example:
+    commandoro -f file.json
+    python commandoro.py -f file.json
 
-        Email: mysmarthub@ya.ru
 
-        Donate: https://paypal.me/myhackband
+    - Use the option -n/--name to specify an existing package name.
 
-        https://yoomoney.ru/to/4100115206129186
+    Example:
+    commandoro -f file.json -n Ubuntu
+    python commandoro.py -f file.json -n Ubuntu
 
-        4048 0250 0089 5923
+    - Use the option -a for autorun and auto-completion.
+
+    Example:
+    commandoro -f file.json -n Ubuntu -a
+    python commandoro.py -f file.json -n Ubuntu -a
+
+    Author and developer: Aleksandr Suvorov
+
+    Url: https://github.com/mysmarthub/
+
+    Email: mysmarthub@ya.ru
+
+    Donate: https://paypal.me/myhackband
+
+    https://yoomoney.ru/to/4100115206129186
+
+    4048 0250 0089 5923
         """
     start_logo()
     while file != 'exit':
@@ -262,19 +271,21 @@ def cli(file, name, auto):
                 click.echo('Getting started...')
                 if not auto:
                     commander.smart_print()
-                    auto = get_action(title='Execute commands automatically?')
-                start(pack_obj=pack_objects[pack_name], auto=auto)
+                    sub_auto = get_action(title='Execute commands automatically?')
+                else:
+                    sub_auto = auto
+                start(pack_obj=pack_objects[pack_name], auto=sub_auto)
 
                 if auto:
                     file = 'exit'
                 else:
                     commander.smart_print()
-                    user_input = get_action('Continue work?')
+                    user_input = get_action('Close the program?')
                     if user_input:
+                        break
+                    else:
                         name = None
                         continue
-                    else:
-                        break
 
             elif action is None:
                 click.echo('\nExit...')

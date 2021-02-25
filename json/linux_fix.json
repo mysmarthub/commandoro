@@ -25,10 +25,14 @@
     "sudo apt-get -y install snap",
     "pip3 install virtualenv --no-input",
     "pip3 install wheel --no-input",
-    "pip3 install mycleaner --no-input",
-    "pip3 install smartcleaner --no-input",
-    "pip3 install sfd --no-input",
-    "python3 -m pip install --user --upgrade setuptools wheel"
+    "python3 -m pip install --user --upgrade setuptools wheel",
+    "pip install mycleaner --no-input",
+    "pip install smartcleaner --no-input",
+    "pip install sfd --no-input",
+    "pip install linuxautofix --no-input",
+    "pip install commandoro --no-input",
+    "pip install smartpassgen --no-input",
+    "pip install smartpassman --no-input"
   ],
 
   "Fedora":
@@ -57,7 +61,14 @@
     "sudo dnf install gstreamer1-plugins-good gstreamer1-plugins-ugly",
     "sudo dnf install lame-libs",
     "sudo dnf install ffmpeg-libs",
-    "sudo dnf install compat-ffmpeg28"
+    "sudo dnf install compat-ffmpeg28",
+    "pip install mycleaner --no-input",
+    "pip install smartcleaner --no-input",
+    "pip install sfd --no-input",
+    "pip install linuxautofix --no-input",
+    "pip install commandoro --no-input",
+    "pip install smartpassgen --no-input",
+    "pip install smartpassman --no-input"
   ],
 
   "Manjaro":
@@ -71,8 +82,14 @@
     "pacman -Sy twine --noconfirm",
     "pacman -Sy tree --noconfirm",
     "pacman -Sy vlc --noconfirm",
-    "packman -Sy neofetch --noconfirm"
-
+    "packman -Sy neofetch --noconfirm",
+    "pip install mycleaner --no-input",
+    "pip install smartcleaner --no-input",
+    "pip install sfd --no-input",
+    "pip install linuxautofix --no-input",
+    "pip install commandoro --no-input",
+    "pip install smartpassgen --no-input",
+    "pip install smartpassman --no-input"
   ],
 
   "default":
@@ -82,6 +99,13 @@
     "pip install virtualenv --no-input",
     "pip install pipenv --no-input",
     "pip install wheel --no-input",
+    "pip install mycleaner --no-input",
+    "pip install smartcleaner --no-input",
+    "pip install sfd --no-input",
+    "pip install linuxautofix --no-input",
+    "pip install commandoro --no-input",
+    "pip install smartpassgen --no-input",
+    "pip install smartpassman --no-input",
     "sudo echo GRUB_TIMEOUT=30 >> /etc/default/grub",
     "sudo echo GRUB_GFXMODE=1280x1024 >> /etc/default/grub",
     "sudo echo DefaultTimeoutStopSec=10s >> /etc/systemd/system.conf",

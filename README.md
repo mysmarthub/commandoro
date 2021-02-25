@@ -10,7 +10,7 @@ Commandoro
 
 ---
 
->Console and graphical utility for automating command execution
+>Utility for automating command execution
 
     Author and developer: Aleksandr Suvorov
 
@@ -38,8 +38,7 @@ Commandoro
 
 Help the project financially:
 -----------------------------
- If you like my projects, you can support me financially -
- " for an apartment in Moscow or a hut in the taiga) ..."
+ If you like my projects, you can support me financially.
 
 > PayPal: https://paypal.me/myhackband
 
@@ -50,6 +49,30 @@ Help the project financially:
 
 > If you can't find a way to donate, write to me:
  mailto: `mysmarthub@ya.ru`
+
+
+---
+What's news?
+---
+1. Changed interface
+2. An added menu for working with file. 
+3. Removed -d option
+4. Removed option -y
+5. Added option -a
+6. Added the ability to select autorun commands.
+7. If you do not select autorun or do 
+   not specify an option -a, the program will ask 
+   for permission to execute commands, 
+   which will allow unnecessary commands to be skipped.
+   
+8. If you do not select autorun, 
+   after the program finishes, 
+   you can return to the selection 
+   of packages, or exit.
+   
+9. Dismissed the possibility of using the default package, 
+   now the package named "default" 
+   must be run as a regular package.
 
 ---
 Termux support:
@@ -87,15 +110,15 @@ The console version:
 
 ```json
 {
-  "Commands pack name": [
+  "Name1": [
     "command one",
     "command two"
   ],
-  "Next commands pack name": [
+  "Name2": [
     "command one",
     "command two"
   ],
-  "default": [
+  "Name3": [
     "command one",
     "command two"
   ]
@@ -107,84 +130,41 @@ The console version:
 > For convenience, you can create a package named "
 default" and store common commands in it, which are the same in some packages.
 
-> Use the -d option when starting the utility
- to execute commands from the "default" package
- after executing the main package of your choice.
-
 > You can pass the file name as an argument when running -f [file path]
  or --file [file path].
 
-> You can also specify the name of the program using the -n or
- --name parameter, if you have a package with this name,
- the automatic execution of commands from this package will begin.
- This is necessary in order to, for example,
- create tasks in the scheduler and automatically run
- the utility with a batch of commands at the right time,
- without your participation.
+> You can also specify the program name with -n or 
+> the --name parameter, if you have a package with that name, 
+> then the command package with this name will be selected, 
+> if you specify the -а parameter, 
+> the automatic execution of commands from this package will start. 
+> This is necessary, for example, 
+> in order to create tasks in the scheduler and automatically launch 
+> the utility with the right command package at the right time, 
+> without your participation.
 
 > Attention! Some commands require you to run as an administrator.
- To run some commands in graphical mode,
- you need to install dependencies on the administrator name:
+   To run some commands,
+   you need to install dependencies on admin name:
 
 `sudo pip install -r requirements.txt`
 
 > With this utility, you can easily automate
 manual execution, storage, and automatic execution of commands.
 
-> Create your own file with command packages or use and
-edit the default file. In the settings file, create
-new command packages, use the key as the package name
-and the value as the list of commands (see the default file).
+> With this utility it is very convenient to automatically execute
+   necessary commands and configure the system after installation.
 
-> With this utility, it is very convenient
- to perform routine tasks, automatically execute the
- necessary commands, and configure the system after installation.
-
-
-
-> The settings file is very simple and clear,
-and all the commands you need for different
+> The settings file is very simple and straightforward,
+and all the necessary commands for different
 cases or different systems will be stored in one place.
-You will not need to keep them in memory,
-in different files, enter them manually or search the Internet.
+You will not need to store them in memory,
+in different files, or search the Internet every time.
 
-> There is a "default" section in the settings file, from which commands
-will be executed in any case.
-This is done to combine common commands
-for all command packages into a single default package.
-
-> If you have created your own settings file,
-just specify the full path to this file when
-running the script as a parameter -f [config.json] or --file [config.json].
- If you are using the graphical version of the program,
-just open the file with the settings using the open button.
-The file must be in json format and have the required structure.
-
-> After starting, the program will prompt you
-to select the desired item, and then execute all
-the commands that are stored in
-the settings file under this name/key.
-
-    Use -n [Command name] or --name [Command name] for automatic
-    executing a batch of commands.
-
----
-The GUI version:
-----------------
-
-> Graphical utility for automating the execution of command packages,
-their creation, storage, editing, and launch.
-
-> The graphical version allows you to open files with
-command packages, change, add, delete packages,
-save changes to a file, save all changes to a new file,
-view commands from each package, change, add and delete commands.
-
-> Execute commands without saving to a file,
-edit packages and commands without saving,
-add, remove, and modify the default package and commands from this package.
-It has the function of recording work in a log file.
-
+> If you created your own command package file,
+just give the full path to this file at startup: --file file.json
+> 
+> The file must be in json format and have the required structure.
 
 ---
 Help:
@@ -195,17 +175,24 @@ Usage: commandoro.py [OPTIONS]
 
   Commandoro - CLI utility for automatic command execution.
 
-  - To work, it uses files that store named command packages,     where
-  the name is the name of the command package,     and the value is a
-  list of commands.
+  - Run the utility without parameters to manually select options.
 
-  - You can create your own files with command packages using the
-  default structure, and pass the path to them as an argument at startup
-  and pass the path to them as an argument at startup.
+  Example: commandoro python commandoro.py
 
-  - Use the name - "default" - name for the package with the default
-  commands. You can perform them in addition to the selected command
-  package.
+  - Use the option -f/--file [filename] to select a file with command
+  packages.
+
+  Example: commandoro -f file.json python commandoro.py -f file.json
+
+  - Use the option -n/--name to specify an existing package name.
+
+  Example: commandoro -f file.json -n Ubuntu python commandoro.py -f
+  file.json -n Ubuntu
+
+  - Use the option -a for autorun and auto-completion.
+
+  Example: commandoro -f file.json -n Ubuntu -a python commandoro.py -f
+  file.json -n Ubuntu -a
 
   Author and developer: Aleksandr Suvorov
 
@@ -221,10 +208,9 @@ Usage: commandoro.py [OPTIONS]
 
 Options:
   -f, --file FILE  The path to the file with the command packs
-  -d, --default    Run an additional batch of commands from default
   -n, --name TEXT  Name of the package
+  -a, --auto       Auto command execution, auto exit
   -v, --version    Displays the version of the program and exits.
-  -y, --yes        Auto command execution
   --help           Show this message and exit.
 
 ```
@@ -247,7 +233,7 @@ Installation and launch:
 
 `commandoro --file config.json`
 
-`commandoro --file config.json --name Ubuntu -d -y`
+`commandoro --file config.json --name Ubuntu -a`
 
 > On some systems, some commands require administrator rights,
  so you can install the utility and run it further using:
@@ -256,7 +242,7 @@ Installation and launch:
 
 `sudo commandoro`
 
-`sudo commandoro --file config.json --name Ubuntu -d -y`
+`sudo commandoro --file config.json --name Ubuntu -a`
 
 > You can download the source files and run using Python:
 
@@ -276,18 +262,19 @@ or
 
 `sudo python commandoro.py`
 
-    Commandoro Gui:
-    ---------------
-
-    pip install -r requirements.txt
-    
-    python commandoro_gui.py
-
-    Sudo Commandoro Gui:
-    --------------------
-
-    sudo pip install -r requirements.txt
-    sudo python commandoro_gui.py
+> If run without options, you will be prompted to select or create a file.
+> 
+> Если указать опцию -f [адрес файла] и передать ей адрес к файлу с пакетами комманд,
+> будет пердложено выбрать нужный пакет.
+> If you specify the -f [file address] option and pass 
+> it the address to the file with command packages.
+> 
+> Specifying the -n [package name] option and specifying an existing package name will select that package.
+> 
+> If you specify the -a parameter, the program will auto-complete 
+> if you specify the correct path to the file
+> and the correct package name, the script will execute the commands 
+> from the specified package automatically, with automatic completion.
 
 ---
 Links:

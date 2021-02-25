@@ -18,6 +18,7 @@ Yandex money: https://yoomoney.ru/to/4100115206129186
 Visa: 4048 0250 0089 5923
 
 
+
 If you can't find a way to donate, write to me:
  mailto: `mysmarthub@ya.ru`
 

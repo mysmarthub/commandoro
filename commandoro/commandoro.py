@@ -48,7 +48,7 @@ def create_file_dialog():
             click.echo('Error! Name is too short!')
             continue
         break
-    file = commander.create_file(name, root=False)
+    file = commander.create_file(f'{name}_commands.json', root=False)
     click.edit(filename=file)
     click.echo('The file is created in your home directory!')
     click.open_file(filename=file)
@@ -150,7 +150,7 @@ def get_pack_action(pack_obj: commander.Pack):
             input('Enter for continue ... ')
 
 
-def start(pack_obj, yes=True):
+def start(pack_obj, auto=True):
     count = 0
     errors = []
     click.echo()
@@ -160,7 +160,7 @@ def start(pack_obj, yes=True):
         count += 1
         msg = f'{count}: [execute]:[command]:{command}'
         click.echo(msg)
-        if yes:
+        if auto:
             work = True
         else:
             work = get_action('Do you want to continue?')
@@ -183,13 +183,13 @@ def start(pack_obj, yes=True):
 @click.option('--file', '-f', help='The path to the file with the command packs',
               type=click.Path(exists=True, dir_okay=False))
 @click.option('--name', '-n', help='Name of the package')
+@click.option('--auto', '-a',
+              is_flag=True,
+              help='Auto command execution')
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
               expose_value=False, is_eager=True)
-@click.option('--yes', '-y',
-              is_flag=True,
-              help='Auto command execution')
-def cli(file, name, yes):
+def cli(file, name, auto):
     """Commandoro - CLI utility for automatic command execution.
 
         - To work, it uses files that store named command packages,     where the
@@ -218,7 +218,6 @@ def cli(file, name, yes):
         """
     start_logo()
     while file != 'exit':
-
         if file is None:
             commander.smart_print('File information')
             click.echo(f'File not found... ')
@@ -261,12 +260,12 @@ def cli(file, name, yes):
                 commander.smart_print()
                 click.echo(f'[pack name]:[{pack_name}]')
                 click.echo('Getting started...')
-                if not yes:
+                if not auto:
                     commander.smart_print()
-                    yes = get_action(title='Execute commands automatically?')
-                start(pack_obj=pack_objects[pack_name], yes=yes)
+                    auto = get_action(title='Execute commands automatically?')
+                start(pack_obj=pack_objects[pack_name], auto=auto)
 
-                if yes:
+                if auto:
                     file = 'exit'
                 else:
                     commander.smart_print()

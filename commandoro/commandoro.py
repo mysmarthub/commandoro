@@ -98,7 +98,7 @@ def get_name_menu(pack_objects):
         """Shows a simple menu."""
         commander.smart_print('Command packages:')
         for n, name in num_pack.items():
-            click.echo(f'{n}: {name} | Commands[{pack_objects[name].count}]')
+            click.echo(f'{n}: [name]:{name}:[commands]:{pack_objects[name].count}')
         click.echo('0: open new file')
         commander.smart_print()
         num = click.prompt(text='Enter the package', type=int)
@@ -132,8 +132,7 @@ def get_action(title):
 def get_pack_action(pack_obj: commander.Pack):
     while 1:
         commander.smart_print('Pack menu')
-        click.echo(f'The selected package {pack_obj.name} | '
-                   f'Commands:[{pack_obj.count}]')
+        click.echo(f'The selected package: [name]:{pack_obj.name}:[commands]:{pack_obj.count}')
         commander.smart_print()
         click.echo('s: start')
         click.echo('p: print commands')
@@ -144,7 +143,7 @@ def get_pack_action(pack_obj: commander.Pack):
         elif char in ('s', 'ы'):
             return True
         elif char in ('p', 'з'):
-            commander.smart_print(f'[{pack_obj.name}]:Command list({pack_obj.count})')
+            commander.smart_print(f'[name]:{pack_obj.name}:[commands]:{pack_obj.count}')
             for n, command in enumerate(pack_obj.command_list, 1):
                 click.echo(f'{n}. {command}')
             commander.smart_print()
@@ -155,11 +154,11 @@ def start(pack_obj, yes=True):
     count = 0
     errors = []
     click.echo()
-    commander.smart_print(f'Pack name: [{pack_obj.name}]')
+    commander.smart_print(f'[name]:[{pack_obj.name}]')
     for command in pack_obj.command_list:
         commander.smart_print('', '=')
         count += 1
-        msg = f'[execute {count}]:[command]: {command}'
+        msg = f'{count}: [execute]:[command]:{command}'
         click.echo(msg)
         if yes:
             work = True
@@ -183,9 +182,6 @@ def start(pack_obj, yes=True):
 @click.command()
 @click.option('--file', '-f', help='The path to the file with the command packs',
               type=click.Path(exists=True, dir_okay=False))
-@click.option('--default', '-d',
-              is_flag=True,
-              help='Run an additional batch of commands from default')
 @click.option('--name', '-n', help='Name of the package')
 @click.option('--version', '-v', is_flag=True, callback=print_version,
               help='Displays the version of the program and exits.',
@@ -193,7 +189,7 @@ def start(pack_obj, yes=True):
 @click.option('--yes', '-y',
               is_flag=True,
               help='Auto command execution')
-def cli(file, default, name, yes):
+def cli(file, name, yes):
     """Commandoro - CLI utility for automatic command execution.
 
         - To work, it uses files that store named command packages,     where the
@@ -269,18 +265,6 @@ def cli(file, default, name, yes):
                     commander.smart_print()
                     yes = get_action(title='Execute commands automatically?')
                 start(pack_obj=pack_objects[pack_name], yes=yes)
-                if 'default' in pack_dict and pack_name != 'default':
-                    if not default and not yes:
-                        commander.smart_print()
-                        user_input = get_action(title='Run the default package?')
-                        if user_input:
-                            pack_obj = commander.Pack('default', pack_dict["default"])
-                        else:
-                            pack_obj = None
-                    else:
-                        pack_obj = commander.Pack('default', pack_dict["default"])
-                    if pack_obj:
-                        start(pack_obj=pack_obj, yes=yes)
 
                 if yes:
                     file = 'exit'

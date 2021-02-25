@@ -54,12 +54,12 @@ def executor(command: str, test: bool = False) -> bool:
     :param test: <bool> Used for testing. True disables the actual execution of commands.
     :return: <bool> Logical status of command execution
     """
-    if not test:
-        if type(command) is str:
-            status = os.system(command)
-            if status:
-                return False
-    return True
+    # if not test:
+    #     if type(command) is str:
+    #         status = os.system(command)
+    #         if status:
+    #             return False
+    # return True
 
 
 def open_json_file(file):

@@ -2,6 +2,11 @@ Commandoro
 ===
 ---
 
+[Cli command manager] - Console command manager. My new project 
+
+
+***
+
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysmarthub/commandoro)](https://github.com/mysmarthub/commandoro)
 [![Donate](https://img.shields.io/static/v1?label=Python&message=3&color=yellow)](https://python.org)
 [![PyPI](https://img.shields.io/pypi/v/commandoro)](http://pypi.org/project/commandoro)
